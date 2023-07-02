@@ -4,11 +4,37 @@ import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 import 'bootstrap/dist/css/bootstrap.min.css';
+import '@rainbow-me/rainbowkit/styles.css';
+import { getDefaultWallets, RainbowKitProvider } from '@rainbow-me/rainbowkit';
+import { configureChains, createConfig, WagmiConfig } from 'wagmi';
+import { mainnet, goerli } from 'wagmi/chains';
+import { publicProvider } from 'wagmi/providers/public';
+
+const { chains, publicClient } = configureChains(
+  [mainnet, goerli],
+  [publicProvider()]
+);
+
+const { connectors } = getDefaultWallets({
+  appName: 'My RainbowKit App',
+  projectId: 'YOUR_PROJECT_ID',
+  chains,
+});
+
+const wagmiConfig = createConfig({
+  autoConnect: true,
+  connectors,
+  publicClient,
+});
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
-    <App />
+    <WagmiConfig config={wagmiConfig}>
+      <RainbowKitProvider chains={chains}>
+        <App />
+      </RainbowKitProvider>
+    </WagmiConfig>
   </React.StrictMode>
 );
 
