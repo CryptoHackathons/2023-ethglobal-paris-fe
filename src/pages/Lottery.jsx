@@ -41,7 +41,7 @@ export function LotteryPage() {
             </div>
             <div id="lottery-mission">
               <div className="d-flex align-items-center gap-3 mb-3">
-                <h3 className="fw-bold m-0 flex-fill">Mission</h3>
+                <h3 className="fw-bold m-0 flex-fill">Missions</h3>
                 <p className="m-0">Finished (1/2)</p>
               </div>
               <LotteryMissionList />
