@@ -17,7 +17,7 @@ function Layout(props) {
           <ConnectButton />
         </Container>
       </Navbar>
-      <Container>{children}</Container>
+      <Container className="py-4">{children}</Container>
     </div>
   );
 }
