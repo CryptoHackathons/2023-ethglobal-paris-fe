@@ -14,8 +14,7 @@ export function LotteryPage() {
     <>
       <Image
         className="w-100 object-fit-cover"
-        style={{ aspectRatio: '3.2 / 1' }}
-        src="https://dummyimage.com/2560x720/d9d9d9/000000&text=banner"
+        src="https://static.accupass.com/eventbanner/2306261712589032454360.jpg"
       />
       <Row>
         <Col md={7} className="px-4 py-5">
@@ -23,42 +22,34 @@ export function LotteryPage() {
             <div id="lottery-title">
               <div className="gap-4 d-flex align-items-center mb-4">
                 <Image
+                  className="border"
                   roundedCircle
                   width={64}
-                  src="https://dummyimage.com/128x128/d9d9d9/000000&text=thumbnail"
+                  src="https://static.accupass.com/org/2105221437371944440174.jpg"
                 />
-                <h4 className="m-0 fw-bold">Lottery Host</h4>
+                <h4 className="m-0 fw-bold">Skyline Film</h4>
               </div>
               <div>
-                <h3 className="fw-bold">Lottery ABCDE</h3>
+                <h3 className="fw-bold">
+                  Skyline Film 屋頂電影院 7月台北屋頂放映 7/21(Fri) - 7/23(Sun)
+                  贈票活動
+                </h3>
                 <p className="m-0">
-                  08-07-2023 07:00 ~ 22-07-2023 07:00 (GMT+2)
+                  08-07-2023 07:00 ~ 20-07-2023 07:00 (GMT+2)
                 </p>
               </div>
             </div>
             <div id="lottery-mission">
               <div className="d-flex align-items-center gap-3 mb-3">
                 <h3 className="fw-bold m-0 flex-fill">Mission</h3>
-                <p className="m-0">Finished (2/2)</p>
+                <p className="m-0">Finished (1/2)</p>
               </div>
               <LotteryMissionList />
             </div>
             <div id="lottery-description">
               <h3 className="fw-bold mb-3">Description</h3>
               <p>
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit. In et
-                ligula cursus, tempor ante egestas, dignissim elit. Vivamus
-                tellus orci, facilisis eget erat sit amet, vestibulum malesuada
-                mauris. Morbi eu pretium turpis. Cras consequat ullamcorper
-                interdum. Proin finibus cursus fringilla. Vestibulum efficitur
-                rutrum laoreet. Donec placerat purus vel facilisis elementum.
-                Pellentesque pharetra augue vitae leo accumsan iaculis. Quisque
-                imperdiet velit vitae orci fermentum euismod. Cras non ex quis
-                leo ornare sagittis nec non nisi. Nam pellentesque tincidunt
-                efficitur. Sed id quam eget nisi aliquet auctor eu non neque.
-                Aliquam luctus lectus at eleifend pulvinar. Sed gravida auctor
-                orci, quis auctor mi iaculis quis. Etiam nulla elit, consequat
-                vel ipsum sit amet, accumsan malesuada velit.
+                7月的盛夏，沒什麼比在屋頂喝杯冰涼透心的啤酒，吃著香嫩多汁的美式燻肉，伴著徐徐微風與好電影，還要來得痛快。穿越時空與平行宇宙，經典中的經典，還有讓你捧腹大笑的絕妙好戲。台北7月屋頂，滿足你對好電影的所有想像。
               </p>
             </div>
             <div id="lottery-attendee">
@@ -79,7 +70,7 @@ export function LotteryPage() {
             </div>
             <div id="lottery-rewards">
               <h3 className="fw-bold mb-3">
-                Rewards <Badge pill>3</Badge>
+                Rewards <Badge pill>6</Badge>
               </h3>
               <LotteryRewardList />
             </div>

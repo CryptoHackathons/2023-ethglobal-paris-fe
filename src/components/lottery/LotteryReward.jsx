@@ -1,24 +1,26 @@
 import React from 'react';
 import { Card, Col, Row } from 'react-bootstrap';
-// import PropTypes from 'prop-types';
+import PropTypes from 'prop-types';
 
-function LotteryReward() {
+function LotteryReward(props) {
+  const { reward } = props;
+
   return (
     <Card>
       <Row className="g-0">
         <Col sm={4} className="position-relative">
           <Card.Img
-            src="https://dummyimage.com/300x300/d9d9d9/000000&text=reward"
+            src={reward.imgUrl}
             className="object-fit-cover w-100 h-100 rounded-end-0"
           />
         </Col>
         <Col sm={8} className="d-flex align-items-center">
           <Card.Body>
-            <Card.Title className="fw-bold">Prize A</Card.Title>
+            <Card.Title className="fw-bold">{reward.title}</Card.Title>
             <Card.Text>
-              Lorem ipsum dolor sit ametd
+              {reward.description}
               <br />
-              Quantity: 1
+              Quantity: {reward.quantity}
             </Card.Text>
           </Card.Body>
         </Col>
@@ -27,6 +29,13 @@ function LotteryReward() {
   );
 }
 
-LotteryReward.propTypes = {};
+LotteryReward.propTypes = {
+  reward: PropTypes.shape({
+    imgUrl: PropTypes.string.isRequired,
+    title: PropTypes.string.isRequired,
+    description: PropTypes.string.isRequired,
+    quantity: PropTypes.number.isRequired,
+  }).isRequired,
+};
 
 export default LotteryReward;
