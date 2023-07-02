@@ -2,8 +2,7 @@ import React from 'react';
 import './App.css';
 import Layout from './components/Layout';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
-import { HomePage } from './pages/Home';
-import { LotteryPage } from './pages';
+import { AddLotteryPage, HomePage, LotteryPage } from './pages';
 
 function App() {
   return (
@@ -12,6 +11,7 @@ function App() {
         <Routes>
           <Route path="/" element={<HomePage />} />
           <Route path="/lottery" element={<LotteryPage />} />
+          <Route path="/add/*" element={<AddLotteryPage />} />
         </Routes>
       </Layout>
     </BrowserRouter>
