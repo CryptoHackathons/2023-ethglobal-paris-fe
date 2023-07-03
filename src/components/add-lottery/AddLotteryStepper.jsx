@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import classes from './AddLotteryStepper.module.css';
 import { useAtomValue } from 'jotai';
 import { useLocation } from 'react-router-dom';
 import { AddLotteryAtom } from '../../model';
@@ -44,7 +45,7 @@ export function AddLotteryStepper() {
   const location = useLocation();
 
   return (
-    <div className="d-flex flex-column mt-2 ms-2 gap-1">
+    <div className={`d-flex flex-column mt-2 ms-2 gap-1 ${classes.wrap}`}>
       {steps.map((step, idx) => (
         <AddLotteryStep
           key={idx}

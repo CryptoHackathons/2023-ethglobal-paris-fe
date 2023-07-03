@@ -1,0 +1,7 @@
+.wrap * {
+  -webkit-transition: color 0.15s ease-in-out,
+    background-color 0.15s ease-in-out;
+  -moz-transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out;
+  -o-transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out;
+  transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out;
+}
