@@ -1,9 +1,12 @@
 import React from 'react';
 import { Button, Image } from 'react-bootstrap';
 import { AddLotteryMissionList, AddLotteryRewardList } from './general';
+import { useNavigate } from 'react-router-dom';
 // import PropTypes from 'prop-types';
 
 export function AddLotteryStep4() {
+  const navigate = useNavigate();
+
   return (
     <>
       <div className="d-grid gap-5">
@@ -32,7 +35,12 @@ export function AddLotteryStep4() {
             7月的盛夏，沒什麼比在屋頂喝杯冰涼透心的啤酒，吃著香嫩多汁的美式燻肉，伴著徐徐微風與好電影，還要來得痛快。穿越時空與平行宇宙，經典中的經典，還有讓你捧腹大笑的絕妙好戲。台北7月屋頂，滿足你對好電影的所有想像。
           </p>
         </div>
-        <Button className="w-50 mx-auto">Submit</Button>
+        <div className="d-grid gap-1 w-50 mx-auto">
+          <Button onClick={() => navigate('../missions')} variant="secondary">
+            Back
+          </Button>
+          <Button>Submit</Button>
+        </div>
       </div>
     </>
   );
