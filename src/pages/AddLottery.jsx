@@ -1,6 +1,6 @@
 import React from 'react';
 import { Col, Row } from 'react-bootstrap';
-import { Route, Routes } from 'react-router-dom';
+import { Navigate, Route, Routes } from 'react-router-dom';
 import {
   AddLotteryStep1,
   AddLotteryStep2,
@@ -15,6 +15,7 @@ export function AddLotteryPage() {
     <Row>
       <Col md={7} className="px-4 py-5">
         <Routes>
+          <Route path="/" element={<Navigate replace to="./lottery-info" />} />
           <Route path="/lottery-info" element={<AddLotteryStep1 />} />
           <Route path="/rewards" element={<AddLotteryStep2 />} />
           <Route path="/missions" element={<AddLotteryStep3 />} />
