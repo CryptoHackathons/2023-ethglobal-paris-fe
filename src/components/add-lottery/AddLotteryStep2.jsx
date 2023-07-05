@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Button, Accordion } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
-import AddLoteeryRewardSetter from './general/AddLoteeryRewardSetter';
+import AddLotteryRewardSetter from './general/AddLotteryRewardSetter';
 // import PropTypes from 'prop-types';
 
 export function AddLotteryStep2() {
@@ -10,7 +10,7 @@ export function AddLotteryStep2() {
     photoPath: '',
     Title: '',
     Description: '',
-    RewardAmount: 0,
+    RewardAmount: 1,
   };
   const [rewards, setRewards] = useState([emptyReward]);
 
@@ -29,12 +29,12 @@ export function AddLotteryStep2() {
   return (
     <>
       <div className="d-grid gap-4">
-        <Accordion defaultActiveKey="0" alwaysOpen>
+        <Accordion defaultActiveKey="1" alwaysOpen>
           {rewards.map((r, idx) => (
             <>
               <Accordion.Item eventKey={idx}>
                 <Accordion.Header>Reward {idx + 1}</Accordion.Header>
-                <AddLoteeryRewardSetter
+                <AddLotteryRewardSetter
                   idx={idx}
                   reward={r}
                   onDeleteReward={() => handleDeleteReward(idx)}

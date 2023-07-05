@@ -2,15 +2,22 @@ import React, { useState } from 'react';
 import { Button, Accordion, Form, InputGroup } from 'react-bootstrap';
 import PropTypes from 'prop-types';
 
-function AddLoteeryRewardSetter(props) {
+function AddLotteryRewardSetter(props) {
   const [rewardAmount, setRewardAmount] = useState(0);
+  const [selectedFile, setSelectedFile] = useState(null);
+
+  const handleFileChange = (event) => {
+    const file = event.target.files[0];
+    setSelectedFile(file);
+  };
 
   return (
     <Accordion.Body>
       <Form>
         <Form.Group controlId="formFileLg" className="mb-3">
           <Form.Label>Reward Photo</Form.Label>
-          <Form.Control value={props.reward.photoPath} type="file" size="lg" />
+          <Form.Control type="file" size="lg" onChange={handleFileChange} />
+          <div>{selectedFile && selectedFile.name}</div>
         </Form.Group>
         <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
           <Form.Label> Reward Title</Form.Label>
@@ -51,10 +58,10 @@ function AddLoteeryRewardSetter(props) {
   );
 }
 
-AddLoteeryRewardSetter.propTypes = {
+AddLotteryRewardSetter.propTypes = {
   idx: PropTypes.number.isRequired,
   reward: PropTypes.shape({
-    photoPath: PropTypes.string.isRequired,
+    photoPath: PropTypes.file,
     Title: PropTypes.string.isRequired,
     Description: PropTypes.string.isRequired,
     RewardAmount: PropTypes.number.isRequired,
@@ -62,4 +69,4 @@ AddLoteeryRewardSetter.propTypes = {
   onDeleteReward: PropTypes.func.isRequired,
 };
 
-export default AddLoteeryRewardSetter;
+export default AddLotteryRewardSetter;
