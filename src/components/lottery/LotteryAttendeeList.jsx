@@ -1,18 +1,25 @@
 import React from 'react';
-// import PropTypes from 'prop-types';
+import PropTypes from 'prop-types';
 import { Col, Row } from 'react-bootstrap';
 import LotteryAttendee from './LotteryAttendee';
 
-export function LotteryAttendeeList() {
+export function LotteryAttendeeList({ attendees }) {
   return (
     <Row className="g-4">
-      {[1, 2, 3, 4, 5, 6, 7, 8].map((idx) => (
+      {attendees.map((at, idx) => (
         <Col key={idx} md={3}>
-          <LotteryAttendee userName={`User ${idx}`} />
+          <LotteryAttendee attendee={at} />
         </Col>
       ))}
     </Row>
   );
 }
 
-LotteryAttendeeList.propTypes = {};
+LotteryAttendeeList.propTypes = {
+  attendees: PropTypes.arrayOf(
+    PropTypes.shape({
+      walletAddr: PropTypes.string.isRequired,
+      thumbnailURL: PropTypes.string.isRequired,
+    }).isRequired
+  ).isRequired,
+};

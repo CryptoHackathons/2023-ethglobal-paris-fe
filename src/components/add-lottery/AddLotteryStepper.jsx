@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import classes from './AddLotteryStepper.module.css';
 import { useAtomValue } from 'jotai';
 import { useLocation } from 'react-router-dom';
-import { AddLotteryAtom } from '../../model';
+import { addLotteryAtom } from '../../model';
 
 function AddLotteryStep(props) {
   const { isCurrent, isLast, number, title } = props;
@@ -41,7 +41,7 @@ AddLotteryStep.propTypes = {
 };
 
 export function AddLotteryStepper() {
-  const steps = useAtomValue(AddLotteryAtom.steps);
+  const steps = useAtomValue(addLotteryAtom.steps);
   const location = useLocation();
 
   return (

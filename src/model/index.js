@@ -1,1 +1,2 @@
-export { AddLotteryAtom } from './AddLottery';
+export { addLotteryAtom } from './addLottery';
+export { lotteryAtom } from './lottery';

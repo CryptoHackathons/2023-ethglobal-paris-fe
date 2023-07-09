@@ -10,7 +10,7 @@ function LotteryReward(props) {
       <Row className="g-0">
         <Col sm={4} className="position-relative">
           <Card.Img
-            src={reward.imgUrl}
+            src={reward.imageURL}
             className="object-fit-cover w-100 h-100 rounded-end-0"
           />
         </Col>
@@ -31,7 +31,7 @@ function LotteryReward(props) {
 
 LotteryReward.propTypes = {
   reward: PropTypes.shape({
-    imgUrl: PropTypes.string.isRequired,
+    imageURL: PropTypes.string.isRequired,
     title: PropTypes.string.isRequired,
     description: PropTypes.string.isRequired,
     quantity: PropTypes.number.isRequired,

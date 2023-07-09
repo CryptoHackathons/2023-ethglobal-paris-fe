@@ -1,6 +1,6 @@
 import { atom } from 'jotai';
 
-export const AddLotteryAtom = {
+export const addLotteryAtom = {
   steps: atom([
     {
       title: 'Lottery Information',

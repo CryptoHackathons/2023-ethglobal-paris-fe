@@ -2,19 +2,13 @@ import React from 'react';
 import { Card, Image } from 'react-bootstrap';
 import PropTypes from 'prop-types';
 
-function LotteryAttendee(props) {
-  const { userName } = props;
-
+function LotteryAttendee({ attendee }) {
   return (
     <Card>
       <Card.Body>
         <div className="d-flex flex-column align-items-center gap-3">
-          <Image
-            roundedCircle
-            width={64}
-            src="https://dummyimage.com/128x128/d9d9d9/000000&text=thumbnail"
-          />
-          <p className="fw-bold m-0">{userName}</p>
+          <Image roundedCircle width={64} src={attendee.thumbnailURL} />
+          <p className="fw-bold m-0 w-100">{attendee.walletAddr}</p>
         </div>
       </Card.Body>
     </Card>
@@ -22,7 +16,10 @@ function LotteryAttendee(props) {
 }
 
 LotteryAttendee.propTypes = {
-  userName: PropTypes.string.isRequired,
+  attendee: PropTypes.shape({
+    walletAddr: PropTypes.string.isRequired,
+    thumbnailURL: PropTypes.string.isRequired,
+  }).isRequired,
 };
 
 export default LotteryAttendee;

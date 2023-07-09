@@ -3,10 +3,12 @@ import PropTypes from 'prop-types';
 import { Button } from 'react-bootstrap';
 
 function LotteryMissionButton(props) {
-  const { icon, completed, onClick, children } = props;
+  const { icon, link, completed, onClick, children } = props;
 
   return (
     <Button
+      href={link}
+      target="_blank"
       className="d-flex align-items-center text-start ps-3 pe-4 py-3"
       variant={completed ? 'secondary' : 'primary'}
       onClick={onClick}
@@ -26,6 +28,7 @@ function LotteryMissionButton(props) {
 
 LotteryMissionButton.propTypes = {
   icon: PropTypes.string.isRequired,
+  link: PropTypes.string.isRequired,
   completed: PropTypes.bool.isRequired,
   onClick: PropTypes.func,
   children: PropTypes.node,

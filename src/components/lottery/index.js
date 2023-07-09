@@ -1,5 +1,5 @@
 export { LotteryAttendeeList } from './LotteryAttendeeList';
 export { LotteryBadgeHolder } from './LotteryBadgeHolder';
-export { LotteryCounter } from './LotteryCounter';
+export { LotteryTimer } from './LotteryTimer';
 export { LotteryMissionList } from './LotteryMissionList';
 export { LotteryRewardList } from './LotteryRewardList';

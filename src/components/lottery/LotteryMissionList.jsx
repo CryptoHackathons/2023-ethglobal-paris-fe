@@ -1,18 +1,40 @@
 import React from 'react';
-// import PropTypes from 'prop-types';
+import PropTypes from 'prop-types';
 import LotteryMissionButton from './LotteryMissionButton';
+import { titleCase } from '../../utils/functions';
 
-export function LotteryMissionList() {
+const getMissionLink = (mission) => {
+  return `https://${
+    mission.platform === 'facebook' ? 'www.facebook.com' : 'twitter.com'
+  }/${mission.accountID}`;
+};
+
+export function LotteryMissionList(props) {
+  const { missionList } = props;
   return (
     <div className="d-grid gap-3">
-      <LotteryMissionButton icon="facebook" completed={false}>
-        Follow Skyline Film 屋頂電影院 on Facebook
-      </LotteryMissionButton>
-      <LotteryMissionButton icon="instagram" completed={true}>
-        Follow Skyline Film 屋頂電影院 on Instagram
-      </LotteryMissionButton>
+      {missionList.map((m, idx) => (
+        <LotteryMissionButton
+          key={idx}
+          link={getMissionLink(m)}
+          icon={m.platform}
+          completed={m.completed}
+        >
+          Follow {m.accountName} on {titleCase(m.platform)}
+        </LotteryMissionButton>
+      ))}
     </div>
   );
 }
 
-LotteryMissionList.propTypes = {};
+LotteryMissionList.propTypes = {
+  missionList: PropTypes.arrayOf(
+    PropTypes.shape({
+      completed: PropTypes.bool.isRequired,
+      platform: PropTypes.oneOf(['facebook', 'twitter']),
+      action: PropTypes.oneOf(['follow']),
+      accountID: PropTypes.string.isRequired,
+      accountName: PropTypes.string.isRequired,
+    }).isRequired
+  ).isRequired,
+};
