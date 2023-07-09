@@ -11,7 +11,10 @@ export function HomePage() {
   return (
     <>
       <Carousel>
-        <Carousel.Item>
+        <Carousel.Item
+          as="a"
+          href="/lottery/c5f9fbf6-7690-4b0f-a532-48e1937edde7"
+        >
           <img
             className="d-block w-100"
             src="https://static.accupass.com/eventbanner/2306261712589032454360.jpg"
@@ -22,7 +25,10 @@ export function HomePage() {
             <p>Nulla vitae elit libero, a pharetra augue mollis interdum.</p>
           </Carousel.Caption>
         </Carousel.Item>
-        <Carousel.Item>
+        <Carousel.Item
+          as="a"
+          href="/lottery/c5f9fbf6-7690-4b0f-a532-48e1937edde7"
+        >
           <img
             className="d-block w-100"
             src="https://static.accupass.com/eventbanner/2306230802461133375493.jpg"
@@ -34,7 +40,10 @@ export function HomePage() {
             <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
           </Carousel.Caption>
         </Carousel.Item>
-        <Carousel.Item>
+        <Carousel.Item
+          as="a"
+          href="/lottery/c5f9fbf6-7690-4b0f-a532-48e1937edde7"
+        >
           <img
             className="d-block w-100"
             src="https://static.accupass.com/eventbanner/2306150331581341146149.jpg"

@@ -9,10 +9,9 @@ function Layout(props) {
     <div className="App">
       <Navbar bg="light" data-bs-theme="light">
         <Container>
-          <Navbar.Brand href="#home">ZkLottery</Navbar.Brand>
+          <Navbar.Brand href="/">ZkLottery</Navbar.Brand>
           <Nav className="me-auto">
-            <Nav.Link href="#features">Features</Nav.Link>
-            <Nav.Link href="#pricing">Pricing</Nav.Link>
+            <Nav.Link href="/add">Add Lottery</Nav.Link>
           </Nav>
           <ConnectButton />
         </Container>
