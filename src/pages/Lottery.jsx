@@ -9,10 +9,7 @@ import {
 import { useParams } from 'react-router-dom';
 import { useAtom } from 'jotai';
 import { lotteryAtom } from '../model';
-// import PropTypes from 'prop-types';
-
-const getDemoDateString = (date) =>
-  date.toLocaleString('fr-FR', { timeZone: 'Europe/Paris' });
+import { getDemoDateString } from '../utils/functions';
 
 export function LotteryPage() {
   const { lotteryID } = useParams();
