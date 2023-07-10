@@ -1,7 +1,7 @@
 import { useAtom } from 'jotai';
 import React, { useEffect, useState } from 'react';
 import { Button, Form } from 'react-bootstrap';
-import { addLotteryAtom } from '../../model/addLottery';
+import { addLotteryAtom } from '../../model/AddLottery';
 import { useNavigate } from 'react-router-dom';
 
 // get current local time string for datetime-local input
