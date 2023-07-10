@@ -1,49 +1,54 @@
-import React, { useState } from 'react';
-import { Accordion, Form, Dropdown, DropdownButton } from 'react-bootstrap';
+import React from 'react';
+import { Accordion, Button, Form } from 'react-bootstrap';
 import PropTypes from 'prop-types';
 
 function AddLotteryMissionSetter(props) {
-  const [selectedPlatform, setSelectedPlatform] = useState('Twitter');
-
-  const handleSelect = (platform) => {
-    setSelectedPlatform(platform);
-  };
-
-  const [selectedType, setSelectedType] = useState('Follow Account');
-
-  const handleTypeSelect = (type) => {
-    setSelectedType(type);
-  };
   return (
-    <Accordion.Body>
-      <Form>
-        <Form.Group>
-          <Form.Label>Platform{props.mission.name}</Form.Label>
-          <DropdownButton id="dropdown-basic-button" title={selectedPlatform}>
-            <Dropdown.Item onClick={() => handleSelect('Twitter')}>
-              Twitter
-            </Dropdown.Item>
-            <Dropdown.Item onClick={() => handleSelect('Facebook')}>
-              Facebook
-            </Dropdown.Item>
-            <Dropdown.Item onClick={() => handleSelect('Something else')}>
-              Something else
-            </Dropdown.Item>
-          </DropdownButton>
-        </Form.Group>
-        <Form.Group>
-          <Form.Label>Mission Type </Form.Label>
-          <DropdownButton id="dropdown-basic-button" title={selectedType}>
-            <Dropdown.Item onClick={() => handleTypeSelect('Follow Account')}>
-              Follow Account
-            </Dropdown.Item>
-          </DropdownButton>
-        </Form.Group>
-        <Form.Group>
-          <Form.Label>Account to Follow</Form.Label>
-          <Form.Control type="text" placeholder="@ETHGlobal"></Form.Control>
-        </Form.Group>
-      </Form>
+    <Accordion.Body className="d-grid gap-3">
+      <Form.Group controlId={`addLottery.missions.${props.idx}.platform`}>
+        <Form.Label>Platform</Form.Label>
+        <Form.Select
+          name={`platform.${props.idx}`}
+          defaultValue={props.mission.platform}
+          required
+        >
+          <option selected disabled value="">
+            Select platform of this mission...
+          </option>
+          <option value="twitter">Twitter</option>
+          <option value="facebook">Facebook</option>
+        </Form.Select>
+      </Form.Group>
+      <Form.Group controlId={`addLottery.missions.${props.idx}.action`}>
+        <Form.Label>Mission Type </Form.Label>
+        <Form.Select
+          name={`action.${props.idx}`}
+          defaultValue={props.mission.action}
+          required
+        >
+          <option selected disabled value="">
+            Select mission type...
+          </option>
+          <option value="follow">Follow Account</option>
+        </Form.Select>
+      </Form.Group>
+      <Form.Group controlId={`addLottery.missions.${props.idx}.accountID`}>
+        <Form.Label>Account to Follow</Form.Label>
+        <Form.Control
+          type="text"
+          name={`accountID.${props.idx}`}
+          defaultValue={props.mission.accountID}
+          placeholder="@AccountID"
+          required
+        ></Form.Control>
+      </Form.Group>
+      <Button
+        variant="danger"
+        onClick={() => props.onDeleteMission()}
+        disabled={props.isLast}
+      >
+        Delete
+      </Button>
     </Accordion.Body>
   );
 }
@@ -51,8 +56,11 @@ function AddLotteryMissionSetter(props) {
 AddLotteryMissionSetter.propTypes = {
   idx: PropTypes.number.isRequired,
   mission: PropTypes.shape({
-    name: PropTypes.string.isRequired,
+    platform: PropTypes.oneOf(['facebook', 'twitter']).isRequired,
+    action: PropTypes.oneOf(['follow']).isRequired,
+    accountID: PropTypes.string.isRequired,
   }).isRequired,
+  isLast: PropTypes.bool.isRequired,
   onDeleteMission: PropTypes.func.isRequired,
 };
 
