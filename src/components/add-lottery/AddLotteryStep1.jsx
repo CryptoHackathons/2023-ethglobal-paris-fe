@@ -24,14 +24,14 @@ export function AddLotteryStep1() {
   const [validated, setValidated] = useState(false);
   const [timeFrom, setTimeFrom] = useState(() => {
     const now = new Date();
-    const initial = new Date(infoDraft.timeFrom);
+    const initial = new Date(infoDraft.startTime);
     return initial < now
       ? getLocalTimeString(now)
       : getLocalTimeString(initial);
   });
   const [timeTo, setTimeTo] = useState(() => {
     const now = new Date();
-    const initial = new Date(infoDraft.timeTo);
+    const initial = new Date(infoDraft.endTime);
     return initial < now
       ? getLocalTimeString(now)
       : getLocalTimeString(initial);
@@ -50,8 +50,8 @@ export function AddLotteryStep1() {
     const info = {
       bannerURL: fd.get('banner'),
       title: fd.get('title'),
-      timeFrom: getISOTimeString(timeFrom),
-      timeTo: getISOTimeString(timeTo),
+      startTime: getISOTimeString(timeFrom),
+      endTime: getISOTimeString(timeTo),
       description: fd.get('description'),
     };
 
@@ -165,7 +165,7 @@ export function AddLotteryStep1() {
               <Form.Control
                 type="datetime-local"
                 name="timeFrom"
-                defaultValue={getLocalTimeString(new Date(infoDraft.timeFrom))}
+                defaultValue={getLocalTimeString(new Date(infoDraft.startTime))}
                 value={timeFrom}
                 onChange={(event) => handleSetTimeFrom(event.target.value)}
                 required
@@ -180,7 +180,7 @@ export function AddLotteryStep1() {
                 type="datetime-local"
                 name="timeTo"
                 min={timeFrom}
-                defaultValue={getLocalTimeString(new Date(infoDraft.timeTo))}
+                defaultValue={getLocalTimeString(new Date(infoDraft.endTime))}
                 value={timeTo}
                 onChange={(event) => handleSetTimeTo(event.target.value)}
                 required

@@ -2,6 +2,7 @@ import { atom } from 'jotai';
 import { atomWithReset } from 'jotai/utils';
 
 export const addLotteryAtom = {
+  submitting: atom(false),
   steps: atom([
     {
       title: 'Lottery Information',
@@ -33,8 +34,8 @@ export const addLotteryAtom = {
     infoDraft: atomWithReset({
       bannerURL: '',
       title: '',
-      timeFrom: '1980-01-01T00:00:00.000Z', // ISO 8601 format (UTC)
-      timeTo: '1980-01-01T00:00:00.000Z', // ISO 8601 format (UTC)
+      startTime: '1980-01-01T00:00:00.000Z', // ISO 8601 format (UTC)
+      endTime: '1980-01-01T00:00:00.000Z', // ISO 8601 format (UTC)
       description: '',
     }),
     rewardsDraft: atomWithReset({

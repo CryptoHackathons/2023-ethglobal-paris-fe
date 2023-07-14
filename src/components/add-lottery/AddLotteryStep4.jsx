@@ -1,24 +1,76 @@
 import React, { useCallback, useMemo } from 'react';
+import axiosClient from '../../utils/axiosClient';
 import { Badge, Button, Image } from 'react-bootstrap';
 import { AddLotteryMissionList, AddLotteryRewardList } from './general';
 import { useNavigate } from 'react-router-dom';
-import { addLotteryAtom } from '../../model';
+import { addLotteryAtom, globalAtom } from '../../model';
 import { useAtom } from 'jotai';
 import { getDemoDateString } from '../../utils/functions';
+import { ButtonSubmit } from '../common/button';
 
 export function AddLotteryStep4() {
-  const navigate = useNavigate();
+  const [, setErrorToast] = useAtom(globalAtom.errorToast);
+  const [submitting, setSubmitting] = useAtom(addLotteryAtom.submitting);
   const [infoDraft] = useAtom(addLotteryAtom.lotteryDraft.infoDraft);
   const [rewardsDraft] = useAtom(addLotteryAtom.lotteryDraft.rewardsDraft);
   const [missionDraft] = useAtom(addLotteryAtom.lotteryDraft.missionDraft);
 
-  // Date objects for Lottery
-  const dtFrom = useMemo(() => new Date(infoDraft.timeFrom), [infoDraft]);
-  const dtTo = useMemo(() => new Date(infoDraft.timeTo), [infoDraft]);
+  const navigate = useNavigate();
 
-  const handleSubmitLottery = useCallback(() => {
-    console.log('TODO: submit lottery API call');
-  }, []);
+  // Date objects for Lottery
+  const dtFrom = useMemo(() => new Date(infoDraft.startTime), [infoDraft]);
+  const dtTo = useMemo(() => new Date(infoDraft.endTime), [infoDraft]);
+
+  const handleSubmitLottery = useCallback(async () => {
+    setSubmitting(true);
+
+    const addLotteryResponse = await axiosClient
+      .post('/lottery', {
+        ...infoDraft,
+      })
+      .catch((err) => {
+        console.log(err);
+        return { ...err, status: 999 };
+      });
+
+    if (addLotteryResponse.status !== 200) {
+      setSubmitting(false);
+      setErrorToast({
+        show: true,
+        message:
+          addLotteryResponse.status === 999
+            ? addLotteryResponse.message
+            : 'Create Lottery Error',
+      });
+      return;
+    }
+
+    const lotteryID = addLotteryResponse.data;
+
+    const rewardsJSON = JSON.stringify(rewardsDraft);
+    const missionJSON = JSON.stringify(missionDraft);
+
+    const [rewardsResponse, missionResponse] = await Promise.all([
+      axiosClient.post(`/lottery/${lotteryID}/prizes`, {
+        data: rewardsJSON,
+      }),
+      axiosClient.post(`/lottery/${lotteryID}/missions`, {
+        data: missionJSON,
+      }),
+    ]);
+
+    if (rewardsResponse.status !== 200 || missionResponse.status !== 200) {
+      setSubmitting(false);
+      setErrorToast({
+        show: true,
+        message: 'Create Rewards and Missions Error',
+      });
+      return;
+    }
+
+    setSubmitting(false);
+    window.location.href = '/';
+  }, [infoDraft, missionDraft, rewardsDraft, setErrorToast, setSubmitting]);
 
   return (
     <>
@@ -53,7 +105,9 @@ export function AddLotteryStep4() {
           <Button onClick={() => navigate('../missions')} variant="secondary">
             Back
           </Button>
-          <Button onClick={handleSubmitLottery}>Submit</Button>
+          <ButtonSubmit loading={submitting} onClick={handleSubmitLottery}>
+            Submit
+          </ButtonSubmit>
         </div>
       </div>
     </>
