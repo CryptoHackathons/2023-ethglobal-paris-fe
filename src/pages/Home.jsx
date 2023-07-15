@@ -5,8 +5,11 @@ import Col from 'react-bootstrap/Col';
 import LotteryItem from '../components/LotteryItem';
 import client from '../utils/axiosClient';
 import { serializeLotteries } from '../utils/functions';
+import { useSetAtom } from 'jotai';
+import { globalAtom } from '../model';
 
 export function HomePage() {
+  const setErrorToast = useSetAtom(globalAtom.errorToast);
   const [lotteries, setLotteries] = useState([]);
 
   useEffect(() => {
@@ -17,7 +20,10 @@ export function HomePage() {
         console.log(lotteries);
         setLotteries(lotteries);
       } catch (error) {
-        console.log(error.message);
+        setErrorToast({
+          show: true,
+          message: error.message,
+        });
       }
     }
     getLotteries();

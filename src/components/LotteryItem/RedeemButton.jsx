@@ -4,6 +4,8 @@ import { useAccount, useContractWrite } from 'wagmi';
 import client from '../../utils/axiosClient';
 import { LotteryPropType } from '../../model/type';
 import contract from '../../utils/contract';
+import { useSetAtom } from 'jotai';
+import { globalAtom } from '../../model';
 
 const GET_PROOF = 'Get Proof';
 const REDEEM = 'Redeem';
@@ -11,6 +13,7 @@ const REDEEMED = 'Redeemed';
 
 function RedeemButton(props) {
   const { lotteryId } = props;
+  const setErrorToast = useSetAtom(globalAtom.errorToast);
   const [proof, setProof] = useState(null);
   const [drawerId, setDrawerId] = useState(null);
   const [isButtonLoading, setButtonLoading] = useState(false);
@@ -33,24 +36,31 @@ function RedeemButton(props) {
       setStatus(REDEEM);
     } catch (error) {
       console.log(error);
+      setErrorToast({
+        show: true,
+        message: error.message,
+      });
     } finally {
       setButtonLoading(false);
     }
-  }, [lotteryId, address]);
+  }, [lotteryId, address, setErrorToast]);
 
   const redeemLottery = useCallback(async () => {
     setButtonLoading(true);
     try {
-      write({
+      await write({
         args: [lotteryId, address, drawerId, proof],
       });
       setStatus(REDEEMED);
     } catch (error) {
-      console.log(error);
+      setErrorToast({
+        show: true,
+        message: error.message,
+      });
     } finally {
       setButtonLoading(false);
     }
-  }, [write, lotteryId, address, drawerId, proof]);
+  }, [write, lotteryId, address, drawerId, proof, setErrorToast]);
 
   if (!address) {
     return (

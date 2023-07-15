@@ -8,8 +8,11 @@ import client from '../utils/axiosClient';
 import { useAccount } from 'wagmi';
 import { serializeLotteries } from '../utils/functions';
 import { useNavigate } from 'react-router-dom';
+import { useSetAtom } from 'jotai';
+import { globalAtom } from '../model';
 
 export function MePage() {
+  const setErrorToast = useSetAtom(globalAtom.errorToast);
   const { address, isConnected } = useAccount();
   const [lotteries, setLotteries] = useState([]);
   const navigate = useNavigate();
@@ -30,7 +33,10 @@ export function MePage() {
         console.log(lotteries);
         setLotteries(lotteries);
       } catch (error) {
-        console.log(error.message);
+        setErrorToast({
+          show: true,
+          message: error.message,
+        });
       }
     }
     getUserLotteries();
