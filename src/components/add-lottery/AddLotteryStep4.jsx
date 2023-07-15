@@ -4,16 +4,23 @@ import { Badge, Button, Image } from 'react-bootstrap';
 import { AddLotteryMissionList, AddLotteryRewardList } from './general';
 import { useNavigate } from 'react-router-dom';
 import { addLotteryAtom, globalAtom } from '../../model';
-import { useAtom } from 'jotai';
+import { useAtom, useSetAtom } from 'jotai';
 import { getDemoDateString } from '../../utils/functions';
 import { ButtonSubmit } from '../common/button';
+// import { useContractWrite } from 'wagmi';
+// import contract from '../../utils/contract';
 
 export function AddLotteryStep4() {
-  const [, setErrorToast] = useAtom(globalAtom.errorToast);
+  const setErrorToast = useSetAtom(globalAtom.errorToast);
   const [submitting, setSubmitting] = useAtom(addLotteryAtom.submitting);
   const [infoDraft] = useAtom(addLotteryAtom.lotteryDraft.infoDraft);
   const [rewardsDraft] = useAtom(addLotteryAtom.lotteryDraft.rewardsDraft);
   const [missionDraft] = useAtom(addLotteryAtom.lotteryDraft.missionDraft);
+
+  // const { write } = useContractWrite({
+  //   ...contract,
+  //   functionName: 'listLottery',
+  // });
 
   const navigate = useNavigate();
 
@@ -67,6 +74,18 @@ export function AddLotteryStep4() {
       });
       return;
     }
+
+    // try {
+    //   await write({
+    //     args: [tokenAddress, amount],
+    //   });
+    // } catch (error) {
+    //   setErrorToast({
+    //     show: true,
+    //     message: error.message,
+    //   });
+    //   return;
+    // }
 
     setSubmitting(false);
     window.location.href = '/';
