@@ -1,11 +1,45 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import Image from 'react-bootstrap/Image';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Stack from 'react-bootstrap/Stack';
-import { LotteryItem } from '../components/LotteryItem';
+import LotteryItem from '../components/LotteryItem';
+import client from '../utils/axiosClient';
+import { useAccount } from 'wagmi';
+import { serializeLotteries } from '../utils/functions';
+import { useNavigate } from 'react-router-dom';
 
 export function MePage() {
+  const { address, isConnected } = useAccount();
+  const [lotteries, setLotteries] = useState([]);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (!isConnected || !address) {
+      window.confirm(
+        'Please connect your wallet, we will redirect you to home page'
+      );
+      navigate('/');
+      return;
+    }
+
+    async function getUserLotteries() {
+      try {
+        const res = await client.get(`/user/${address}`);
+        const lotteries = serializeLotteries(res?.data);
+        console.log(lotteries);
+        setLotteries(lotteries);
+      } catch (error) {
+        console.log(error.message);
+      }
+    }
+    getUserLotteries();
+  }, [navigate, isConnected, address]);
+
+  if (!isConnected || !address) {
+    return null;
+  }
+
   return (
     <>
       <Stack
@@ -27,15 +61,15 @@ export function MePage() {
             textAlign: 'center',
           }}
         >
-          E0x71C7656EC7ab88b098defB751B7401B5f6d8976F
+          {address}
         </h2>
       </Stack>
       <h3>Joined Lottery</h3>
       <Row>
-        {[1, 2, 3, 4, 5, 6, 7].map((_item, j) => {
+        {lotteries.map((lottery, j) => {
           return (
             <Col key={j} xs={12} sm={6} md={4} lg={3} className="g-4">
-              <LotteryItem isShowFooter={true} />
+              <LotteryItem lottery={lottery} isShowFooter={true} />
             </Col>
           );
         })}

@@ -8,11 +8,11 @@ import '@rainbow-me/rainbowkit/styles.css';
 import 'bootstrap-icons/font/bootstrap-icons.min.css';
 import { getDefaultWallets, RainbowKitProvider } from '@rainbow-me/rainbowkit';
 import { configureChains, createConfig, WagmiConfig } from 'wagmi';
-import { mainnet, goerli } from 'wagmi/chains';
+import { mainnet, mumbai } from 'wagmi/chains';
 import { publicProvider } from 'wagmi/providers/public';
 
 const { chains, publicClient } = configureChains(
-  [mainnet, goerli],
+  [mainnet, mumbai],
   [publicProvider()]
 );
 

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Accordion, Button, Form } from 'react-bootstrap';
+import { Accordion, Button, Form, InputGroup } from 'react-bootstrap';
 import PropTypes from 'prop-types';
 
 function AddLotteryMissionSetter(props) {
@@ -34,13 +34,16 @@ function AddLotteryMissionSetter(props) {
       </Form.Group>
       <Form.Group controlId={`addLottery.missions.${props.idx}.accountID`}>
         <Form.Label>Account to Follow</Form.Label>
-        <Form.Control
-          type="text"
-          name={`accountID.${props.idx}`}
-          defaultValue={props.mission.accountID}
-          placeholder="@AccountID"
-          required
-        ></Form.Control>
+        <InputGroup>
+          <InputGroup.Text id="basic-addon1">@</InputGroup.Text>
+          <Form.Control
+            type="text"
+            name={`accountID.${props.idx}`}
+            defaultValue={props.mission.accountID}
+            placeholder="AccountID"
+            required
+          ></Form.Control>
+        </InputGroup>
       </Form.Group>
       <Button
         variant="danger"

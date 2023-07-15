@@ -5,3 +5,18 @@ export function titleCase(string) {
 export function getDemoDateString(date) {
   return date.toLocaleString('fr-FR', { timeZone: 'Europe/Paris' });
 }
+
+export function serializeLotteries(lotteries) {
+  return lotteries.map((lottery) => {
+    return {
+      ...lotteries,
+      createdAt: new Date(lottery.createdAt),
+      updatedAt: new Date(lottery.updatedAt),
+      startTime: new Date(lottery.startTime),
+      endTime: new Date(lottery.endTime),
+      description: lottery.description.split('\n\n'),
+      missions: JSON.parse(lottery.missions),
+      prizes: JSON.parse(lottery.prizes),
+    };
+  });
+}
