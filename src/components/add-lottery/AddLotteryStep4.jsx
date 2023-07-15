@@ -1,6 +1,6 @@
-import React, { useCallback, useMemo } from 'react';
+import React, { useCallback, useMemo, useState } from 'react';
 import axiosClient from '../../utils/axiosClient';
-import { Badge, Button, Image } from 'react-bootstrap';
+import { Badge, Button, Form, Image } from 'react-bootstrap';
 import { AddLotteryMissionList, AddLotteryRewardList } from './general';
 import { useNavigate } from 'react-router-dom';
 import { addLotteryAtom, globalAtom } from '../../model';
@@ -11,6 +11,9 @@ import { ButtonSubmit } from '../common/button';
 // import contract from '../../utils/contract';
 
 export function AddLotteryStep4() {
+  // form states
+  const [validated, setValidated] = useState(false);
+
   const setErrorToast = useSetAtom(globalAtom.errorToast);
   const [submitting, setSubmitting] = useAtom(addLotteryAtom.submitting);
   const [infoDraft] = useAtom(addLotteryAtom.lotteryDraft.infoDraft);
@@ -28,68 +31,87 @@ export function AddLotteryStep4() {
   const dtFrom = useMemo(() => new Date(infoDraft.startTime), [infoDraft]);
   const dtTo = useMemo(() => new Date(infoDraft.endTime), [infoDraft]);
 
-  const handleSubmitLottery = useCallback(async () => {
-    setSubmitting(true);
+  const handleSubmitLottery = useCallback(
+    async (event) => {
+      const form = event.currentTarget;
 
-    const addLotteryResponse = await axiosClient
-      .post('/lottery', {
-        ...infoDraft,
-      })
-      .catch((err) => {
-        console.log(err);
-        return { ...err, status: 999 };
-      });
+      event.preventDefault();
+      event.stopPropagation();
+      setValidated(true);
 
-    if (addLotteryResponse.status !== 200) {
+      if (form.checkValidity() === false) return;
+
+      setSubmitting(true);
+
+      const addLotteryResponse = await axiosClient
+        .post('/lottery', {
+          ...infoDraft,
+        })
+        .catch((err) => {
+          console.log(err);
+          return { ...err, status: 999 };
+        });
+
+      if (addLotteryResponse.status !== 200) {
+        setSubmitting(false);
+        setErrorToast({
+          show: true,
+          message:
+            addLotteryResponse.status === 999
+              ? addLotteryResponse.message
+              : 'Create Lottery Error',
+        });
+        return;
+      }
+
+      const lotteryID = addLotteryResponse.data;
+
+      const rewardsJSON = JSON.stringify(rewardsDraft);
+      const missionJSON = JSON.stringify(missionDraft);
+
+      const [rewardsResponse, missionResponse] = await Promise.all([
+        axiosClient.post(`/lottery/${lotteryID}/prizes`, {
+          data: rewardsJSON,
+        }),
+        axiosClient.post(`/lottery/${lotteryID}/missions`, {
+          data: missionJSON,
+        }),
+      ]);
+
+      if (rewardsResponse.status !== 200 || missionResponse.status !== 200) {
+        setSubmitting(false);
+        setErrorToast({
+          show: true,
+          message: 'Create Rewards and Missions Error',
+        });
+        return;
+      }
+
+      const fd = new FormData(form);
+      const { tokenAddress, amount } = {
+        tokenAddress: fd.get('address'),
+        amount: parseInt(fd.get('amount')),
+      };
+
+      console.log(tokenAddress, amount); // TODO: remove after contract integration implemented
+
+      // try {
+      //   await write({
+      //     args: [tokenAddress, amount],
+      //   });
+      // } catch (error) {
+      //   setErrorToast({
+      //     show: true,
+      //     message: error.message,
+      //   });
+      //   return;
+      // }
+
       setSubmitting(false);
-      setErrorToast({
-        show: true,
-        message:
-          addLotteryResponse.status === 999
-            ? addLotteryResponse.message
-            : 'Create Lottery Error',
-      });
-      return;
-    }
-
-    const lotteryID = addLotteryResponse.data;
-
-    const rewardsJSON = JSON.stringify(rewardsDraft);
-    const missionJSON = JSON.stringify(missionDraft);
-
-    const [rewardsResponse, missionResponse] = await Promise.all([
-      axiosClient.post(`/lottery/${lotteryID}/prizes`, {
-        data: rewardsJSON,
-      }),
-      axiosClient.post(`/lottery/${lotteryID}/missions`, {
-        data: missionJSON,
-      }),
-    ]);
-
-    if (rewardsResponse.status !== 200 || missionResponse.status !== 200) {
-      setSubmitting(false);
-      setErrorToast({
-        show: true,
-        message: 'Create Rewards and Missions Error',
-      });
-      return;
-    }
-
-    // try {
-    //   await write({
-    //     args: [tokenAddress, amount],
-    //   });
-    // } catch (error) {
-    //   setErrorToast({
-    //     show: true,
-    //     message: error.message,
-    //   });
-    //   return;
-    // }
-
-    setSubmitting(false);
-    window.location.href = '/';
-  }, [infoDraft, missionDraft, rewardsDraft, setErrorToast, setSubmitting]);
+      window.location.href = '/';
+    },
+    [infoDraft, missionDraft, rewardsDraft, setErrorToast, setSubmitting]
+  );
 
   return (
     <>
@@ -120,11 +142,42 @@ export function AddLotteryStep4() {
           <h3 className="fw-bold mb-3">Description</h3>
           <p>{infoDraft.description}</p>
         </div>
+        <Form
+          id="addLottery.contract"
+          className="d-grid gap-3"
+          noValidate
+          validated={validated}
+          onSubmit={handleSubmitLottery}
+        >
+          <Form.Group controlId="addLottery.contract.address">
+            <Form.Label>Token Address</Form.Label>
+            <Form.Control
+              type="text"
+              name="address"
+              placeholder="0x..."
+              required
+            />
+          </Form.Group>
+          <Form.Group controlId="addLottery.contract.amount">
+            <Form.Label>Token Amount</Form.Label>
+            <Form.Control
+              type="number"
+              name="amount"
+              placeholder="0"
+              min={0}
+              required
+            />
+          </Form.Group>
+        </Form>
         <div className="d-grid gap-1 w-50 mx-auto">
           <Button onClick={() => navigate('../missions')} variant="secondary">
             Back
           </Button>
-          <ButtonSubmit loading={submitting} onClick={handleSubmitLottery}>
+          <ButtonSubmit
+            type="submit"
+            form="addLottery.contract"
+            loading={submitting}
+          >
             Submit
           </ButtonSubmit>
         </div>
