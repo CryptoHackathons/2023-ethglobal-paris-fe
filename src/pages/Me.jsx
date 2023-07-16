@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import Image from 'react-bootstrap/Image';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
@@ -15,9 +15,15 @@ export function MePage() {
   const setErrorToast = useSetAtom(globalAtom.errorToast);
   const { address, isConnected } = useAccount();
   const [lotteries, setLotteries] = useState([]);
+  const isChecked = useRef(false);
   const navigate = useNavigate();
 
   useEffect(() => {
+    if (!isChecked.current) {
+      isChecked.current = true;
+      return;
+    }
+
     if (!isConnected || !address) {
       window.confirm(
         'Please connect your wallet, we will redirect you to home page'
