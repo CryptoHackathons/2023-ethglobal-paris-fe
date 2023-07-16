@@ -9,7 +9,7 @@ const getMissionLink = (mission) => {
   }/${mission.accountID}`;
 };
 
-export function LotteryMissionList(props) {
+function LotteryMissionList(props) {
   const { missionList } = props;
   return (
     <div className="d-grid gap-3">
@@ -38,3 +38,5 @@ LotteryMissionList.propTypes = {
     }).isRequired
   ).isRequired,
 };
+
+export default LotteryMissionList;

@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { Col, Row } from 'react-bootstrap';
 import LotteryAttendee from './LotteryAttendee';
 
-export function LotteryAttendeeList({ attendees }) {
+function LotteryAttendeeList({ attendees }) {
   return (
     <Row className="g-4">
       {attendees.map((at, idx) => (
@@ -23,3 +23,5 @@ LotteryAttendeeList.propTypes = {
     }).isRequired
   ).isRequired,
 };
+
+export default LotteryAttendeeList;

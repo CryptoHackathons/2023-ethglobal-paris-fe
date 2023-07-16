@@ -3,15 +3,11 @@ import { Card, Col, Row } from 'react-bootstrap';
 import PropTypes from 'prop-types';
 import { useCountdown } from '../../hooks';
 
-export function LotteryTimer(props) {
-  const expireTime = useMemo(
-    () => new Date(props.expireTime),
-    [props.expireTime]
-  );
-  const { days, hours, minutes, seconds } = useCountdown(expireTime);
+function LotteryTimer(props) {
+  const { days, hours, minutes, seconds } = useCountdown(props.expireTime);
   // check if it is expired every seconds
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  const expired = useMemo(() => expireTime < new Date(), [seconds]);
+  const expired = useMemo(() => props.expireTime < new Date(), [seconds]);
 
   return (
     <Card>
@@ -47,5 +43,7 @@ export function LotteryTimer(props) {
 }
 
 LotteryTimer.propTypes = {
-  expireTime: PropTypes.string.isRequired, // ISO 8601 format
+  expireTime: PropTypes.instanceOf(Date).isRequired, // ISO 8601 format
 };
+
+export default LotteryTimer;

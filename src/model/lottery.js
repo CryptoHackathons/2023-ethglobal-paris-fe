@@ -1,24 +1,23 @@
 import { atom } from 'jotai';
 
 export const lotteryAtom = {
+  loading: atom(false),
   lottery: atom({
     id: 'c5f9fbf6-7690-4b0f-a532-48e1937edde7', // UUID v4
-    info: {
-      bannerURL:
-        'https://static.accupass.com/eventbanner/2306261712589032454360.jpg',
-      title:
-        'Skyline Film 屋頂電影院 7月台北屋頂放映 7/21(Fri) - 7/23(Sun) 贈票活動',
-      timeFrom: '2023-07-08T05:00:00.000Z', // ISO 8601 format (UTC)
-      timeTo: '2023-07-30T05:00:00.000Z', // ISO 8601 format (UTC)
-      description:
-        '7月的盛夏，沒什麼比在屋頂喝杯冰涼透心的啤酒，吃著香嫩多汁的美式燻肉，伴著徐徐微風與好電影，還要來得痛快。穿越時空與平行宇宙，經典中的經典，還有讓你捧腹大笑的絕妙好戲。台北7月屋頂，滿足你對好電影的所有想像。',
-    },
+    startTime: new Date('2023-07-08T05:00:00.000Z'), // ISO 8601 format (UTC)
+    endTime: new Date('2023-07-30T05:00:00.000Z'), // ISO 8601 format (UTC)
+    bannerURL:
+      'https://static.accupass.com/eventbanner/2306261712589032454360.jpg',
+    title:
+      'Skyline Film 屋頂電影院 7月台北屋頂放映 7/21(Fri) - 7/23(Sun) 贈票活動',
+    description:
+      '7月的盛夏，沒什麼比在屋頂喝杯冰涼透心的啤酒，吃著香嫩多汁的美式燻肉，伴著徐徐微風與好電影，還要來得痛快。穿越時空與平行宇宙，經典中的經典，還有讓你捧腹大笑的絕妙好戲。台北7月屋頂，滿足你對好電影的所有想像。',
     host: {
       thumbnailURL:
         'https://static.accupass.com/org/2105221437371944440174.jpg',
       name: 'Skyline Film',
     },
-    mission: {
+    missions: {
       totalCompletedMissions: 1, // count completed missions
       totalRequiredMissions: 2,
       missionList: [
@@ -40,7 +39,7 @@ export const lotteryAtom = {
         },
       ],
     },
-    rewards: {
+    prizes: {
       totalQuantity: 6,
       contents: [
         {

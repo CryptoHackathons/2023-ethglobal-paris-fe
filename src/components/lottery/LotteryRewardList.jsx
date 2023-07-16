@@ -2,7 +2,7 @@ import React from 'react';
 import LotteryReward from './LotteryReward';
 import PropTypes from 'prop-types';
 
-export function LotteryRewardList(props) {
+function LotteryRewardList(props) {
   const { rewardList } = props;
   return (
     <div className="d-grid gap-4">
@@ -23,3 +23,5 @@ LotteryRewardList.propTypes = {
     }).isRequired
   ).isRequired,
 };
+
+export default LotteryRewardList;

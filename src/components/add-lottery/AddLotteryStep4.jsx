@@ -93,8 +93,6 @@ export function AddLotteryStep4() {
         amount: parseInt(fd.get('amount')),
       };
 
-      console.log(tokenAddress, amount); // TODO: remove after contract integration implemented
-
       try {
         await write({
           args: [tokenAddress, amount],
