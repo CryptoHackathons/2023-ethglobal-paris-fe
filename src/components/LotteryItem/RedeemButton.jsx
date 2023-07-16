@@ -3,7 +3,7 @@ import { Button, Form, Modal } from 'react-bootstrap';
 import { useAccount, useContractWrite } from 'wagmi';
 import client from '../../utils/axiosClient';
 import { LotteryPropType } from '../../model/type';
-import contract from '../../utils/contract';
+import { lotteryContract } from '../../utils/contract';
 import { useSetAtom } from 'jotai';
 import { globalAtom } from '../../model';
 
@@ -21,7 +21,7 @@ function RedeemButton(props) {
   const [isShowSetProofModal, setShowSetProofModal] = useState(false);
   const { address } = useAccount();
   const { write } = useContractWrite({
-    ...contract,
+    ...lotteryContract,
     functionName: 'redeemLotteryPrize',
   });
   const [status, setStatus] = useState(GET_PROOF);

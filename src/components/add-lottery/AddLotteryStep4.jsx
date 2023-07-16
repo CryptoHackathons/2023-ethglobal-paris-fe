@@ -7,8 +7,8 @@ import { addLotteryAtom, globalAtom } from '../../model';
 import { useAtom, useSetAtom } from 'jotai';
 import { getDemoDateString } from '../../utils/functions';
 import { ButtonSubmit } from '../common/button';
-import { useContractWrite } from 'wagmi';
-import contract from '../../utils/contract';
+import { useContractWrite, useWalletClient } from 'wagmi';
+import { lotteryContract, usdtTestContract } from '../../utils/contract';
 
 export function AddLotteryStep4() {
   // form states
@@ -19,10 +19,18 @@ export function AddLotteryStep4() {
   const [infoDraft] = useAtom(addLotteryAtom.lotteryDraft.infoDraft);
   const [rewardsDraft] = useAtom(addLotteryAtom.lotteryDraft.rewardsDraft);
   const [missionDraft] = useAtom(addLotteryAtom.lotteryDraft.missionDraft);
+  const { data: walletClient } = useWalletClient();
 
-  const { write } = useContractWrite({
-    ...contract,
+  const { writeAsync: listLottery } = useContractWrite({
+    ...lotteryContract,
     functionName: 'listLottery',
+    walletClient,
+  });
+
+  const { writeAsync: approveUsdt } = useContractWrite({
+    ...usdtTestContract,
+    functionName: 'approve',
+    walletClient,
   });
 
   const navigate = useNavigate();
@@ -94,7 +102,10 @@ export function AddLotteryStep4() {
       };
 
       try {
-        await write({
+        await approveUsdt({
+          args: [lotteryContract.address, amount],
+        });
+        await listLottery({
           args: [tokenAddress, amount],
         });
       } catch (error) {
@@ -106,9 +117,17 @@ export function AddLotteryStep4() {
       }
 
       setSubmitting(false);
-      window.location.href = '/';
+      // window.location.href = '/';
     },
-    [write, infoDraft, missionDraft, rewardsDraft, setErrorToast, setSubmitting]
+    [
+      approveUsdt,
+      listLottery,
+      infoDraft,
+      missionDraft,
+      rewardsDraft,
+      setErrorToast,
+      setSubmitting,
+    ]
   );
 
   return (
