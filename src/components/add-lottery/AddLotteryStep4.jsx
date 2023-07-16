@@ -7,8 +7,8 @@ import { addLotteryAtom, globalAtom } from '../../model';
 import { useAtom, useSetAtom } from 'jotai';
 import { getDemoDateString } from '../../utils/functions';
 import { ButtonSubmit } from '../common/button';
-// import { useContractWrite } from 'wagmi';
-// import contract from '../../utils/contract';
+import { useContractWrite } from 'wagmi';
+import contract from '../../utils/contract';
 
 export function AddLotteryStep4() {
   // form states
@@ -20,10 +20,10 @@ export function AddLotteryStep4() {
   const [rewardsDraft] = useAtom(addLotteryAtom.lotteryDraft.rewardsDraft);
   const [missionDraft] = useAtom(addLotteryAtom.lotteryDraft.missionDraft);
 
-  // const { write } = useContractWrite({
-  //   ...contract,
-  //   functionName: 'listLottery',
-  // });
+  const { write } = useContractWrite({
+    ...contract,
+    functionName: 'listLottery',
+  });
 
   const navigate = useNavigate();
 
@@ -95,22 +95,22 @@ export function AddLotteryStep4() {
 
       console.log(tokenAddress, amount); // TODO: remove after contract integration implemented
 
-      // try {
-      //   await write({
-      //     args: [tokenAddress, amount],
-      //   });
-      // } catch (error) {
-      //   setErrorToast({
-      //     show: true,
-      //     message: error.message,
-      //   });
-      //   return;
-      // }
+      try {
+        await write({
+          args: [tokenAddress, amount],
+        });
+      } catch (error) {
+        setErrorToast({
+          show: true,
+          message: error.message,
+        });
+        return;
+      }
 
       setSubmitting(false);
       window.location.href = '/';
     },
-    [infoDraft, missionDraft, rewardsDraft, setErrorToast, setSubmitting]
+    [write, infoDraft, missionDraft, rewardsDraft, setErrorToast, setSubmitting]
   );
 
   return (
