@@ -9,6 +9,7 @@ import { getDemoDateString } from '../../utils/functions';
 import { ButtonSubmit } from '../common/button';
 import { useContractWrite, useWalletClient } from 'wagmi';
 import { lotteryContract, usdtTestContract } from '../../utils/contract';
+import { waitForTransaction } from '@wagmi/core';
 
 export function AddLotteryStep4() {
   // form states
@@ -102,12 +103,14 @@ export function AddLotteryStep4() {
       };
 
       try {
-        await approveUsdt({
+        const approveTxn = await approveUsdt({
           args: [lotteryContract.address, amount],
         });
-        await listLottery({
+        await waitForTransaction(approveTxn);
+        const listLotteryTxn = await listLottery({
           args: [tokenAddress, amount],
         });
+        await waitForTransaction(listLotteryTxn);
       } catch (error) {
         setErrorToast({
           show: true,
@@ -117,7 +120,8 @@ export function AddLotteryStep4() {
       }
 
       setSubmitting(false);
-      // window.location.href = '/';
+      alert('Submit Finished');
+      window.location.href = '/';
     },
     [
       approveUsdt,
