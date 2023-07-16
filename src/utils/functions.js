@@ -9,7 +9,7 @@ export function getDemoDateString(date) {
 export function serializeLotteries(lotteries) {
   return lotteries.map((lottery) => {
     return {
-      ...lotteries,
+      ...lottery,
       createdAt: new Date(lottery.createdAt),
       updatedAt: new Date(lottery.updatedAt),
       startTime: new Date(lottery.startTime),

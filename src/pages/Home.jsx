@@ -41,7 +41,7 @@ export function HomePage() {
             >
               <img
                 className="d-block w-100"
-                src={lottery.bannerUrl}
+                src={lottery.bannerURL}
                 alt={lottery.title}
               />
               <Carousel.Caption>

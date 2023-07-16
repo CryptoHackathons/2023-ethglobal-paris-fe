@@ -40,7 +40,7 @@ export function MePage() {
       }
     }
     getUserLotteries();
-  }, [navigate, isConnected, address]);
+  }, [navigate, isConnected, address, setErrorToast]);
 
   if (!isConnected || !address) {
     return null;
