@@ -25,7 +25,7 @@ function LotteryItem(props) {
         </Stack>
       </Card.Header> */}
 
-        <Card.Img src={lottery.bannerURL} />
+        <Card.Img variant="top" src={lottery.bannerURL} />
         <Card.Body>
           <Card.Title>{lottery.title}</Card.Title>
           <Card.Text>

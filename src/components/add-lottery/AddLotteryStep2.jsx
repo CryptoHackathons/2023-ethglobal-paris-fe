@@ -1,5 +1,5 @@
 import React, { useCallback, useState } from 'react';
-import { Button, Accordion, Form } from 'react-bootstrap';
+import { Button, Accordion, Form, Card } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
 import AddLotteryRewardSetter from './general/AddLotteryRewardSetter';
 import { useAtom } from 'jotai';
@@ -67,18 +67,18 @@ export function AddLotteryStep2() {
   );
 
   return (
-    <>
-      <div className="d-grid gap-4">
-        <Accordion defaultActiveKey="1">
-          <Form
-            id="addLottery.rewards"
-            noValidate
-            validated={validated}
-            onSubmit={handleSubmit}
-          >
-            {rewards.map((r, idx) => (
-              <>
-                <Accordion.Item key={idx} eventKey={idx}>
+    <Card>
+      <Card.Body>
+        <div className="d-grid gap-4">
+          <Accordion defaultActiveKey="0">
+            <Form
+              id="addLottery.rewards"
+              noValidate
+              validated={validated}
+              onSubmit={handleSubmit}
+            >
+              {rewards.map((r, idx) => (
+                <Accordion.Item key={idx} eventKey={idx.toString()}>
                   <Accordion.Header>Reward {idx + 1}</Accordion.Header>
                   <AddLotteryRewardSetter
                     idx={idx}
@@ -87,24 +87,24 @@ export function AddLotteryStep2() {
                     onDeleteReward={() => handleDeleteReward(idx)}
                   />
                 </Accordion.Item>
-              </>
-            ))}
-          </Form>
-        </Accordion>
-        <Button onClick={handleAddReward}>Add Prize</Button>
-        <div className="d-grid gap-1 w-50 mx-auto">
-          <Button
-            onClick={() => navigate('../lottery-info')}
-            variant="secondary"
-          >
-            Back
-          </Button>
-          <Button type="submit" form="addLottery.rewards">
-            Next
-          </Button>
+              ))}
+            </Form>
+          </Accordion>
+          <Button onClick={handleAddReward}>Add Prize</Button>
+          <div className="d-grid gap-1 w-50 mx-auto">
+            <Button
+              onClick={() => navigate('../lottery-info')}
+              variant="secondary"
+            >
+              Back
+            </Button>
+            <Button type="submit" form="addLottery.rewards">
+              Next
+            </Button>
+          </div>
         </div>
-      </div>
-    </>
+      </Card.Body>
+    </Card>
   );
 }
 

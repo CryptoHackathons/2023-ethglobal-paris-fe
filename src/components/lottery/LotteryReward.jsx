@@ -11,7 +11,12 @@ function LotteryReward(props) {
         <Col sm={4} className="position-relative">
           <Card.Img
             src={reward.imageURL}
-            className="object-fit-cover w-100 h-100 rounded-end-0"
+            style={{
+              objectFit: 'cover',
+              borderTopRightRadius: 0,
+              borderBottomRightRadius: 0,
+            }}
+            className="w-100 h-100"
           />
         </Col>
         <Col sm={8} className="d-flex align-items-center">

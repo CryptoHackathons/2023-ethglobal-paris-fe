@@ -1,6 +1,6 @@
 import { useAtom } from 'jotai';
 import React, { useEffect, useState } from 'react';
-import { Button, Form } from 'react-bootstrap';
+import { Button, Card, Form } from 'react-bootstrap';
 import { addLotteryAtom } from '../../model/addLottery';
 import { useNavigate } from 'react-router-dom';
 
@@ -108,16 +108,17 @@ export function AddLotteryStep1() {
   }, []);
 
   return (
-    <>
-      <div className="d-grid gap-4">
-        <Form
-          id="addLottery.info"
-          className="d-grid gap-3"
-          noValidate
-          validated={validated}
-          onSubmit={handleSubmit}
-        >
-          {/* <Form.Group controlId="addLottery.info.banner">
+    <Card>
+      <Card.Body>
+        <div className="d-grid gap-4">
+          <Form
+            id="addLottery.info"
+            className="d-grid gap-3"
+            noValidate
+            validated={validated}
+            onSubmit={handleSubmit}
+          >
+            {/* <Form.Group controlId="addLottery.info.banner">
             <Form.Label>Lottery Banner</Form.Label>
             <Form.Control
               type="file"
@@ -125,75 +126,78 @@ export function AddLotteryStep1() {
               accept="image/jpg, image/png"
             />
           </Form.Group> */}
-          <Form.Group controlId="addLottery.info.banner">
-            <Form.Label>Lottery Banner URL</Form.Label>
-            <Form.Control
-              type="url"
-              name="banner"
-              defaultValue={infoDraft.bannerURL}
-              placeholder="Enter lottery banner URL..."
-              required
-            />
-          </Form.Group>
-          <Form.Group controlId="addLottery.info.title">
-            <Form.Label> Lottery Title</Form.Label>
-            <Form.Control
-              type="text"
-              name="title"
-              defaultValue={infoDraft.title}
-              placeholder="Enter lottery title..."
-              required
-            />
-          </Form.Group>
-          <Form.Group controlId="addLottery.info.description">
-            <Form.Label> Description</Form.Label>
-            <Form.Control
-              as="textarea"
-              name="description"
-              defaultValue={infoDraft.description}
-              rows={6}
-              placeholder="Enter lottery description..."
-              required
-            />
-          </Form.Group>
-          <div className="mb-3 d-flex gap-3">
-            <Form.Group
-              className="flex-grow-1"
-              controlId="addLottery.info.timeFrom"
-            >
-              <Form.Label>From</Form.Label>
+            <Form.Group controlId="addLottery.info.banner">
+              <Form.Label>Lottery Banner URL</Form.Label>
               <Form.Control
-                type="datetime-local"
-                name="timeFrom"
-                defaultValue={getLocalTimeString(new Date(infoDraft.startTime))}
-                value={timeFrom}
-                onChange={(event) => handleSetTimeFrom(event.target.value)}
+                type="url"
+                name="banner"
+                defaultValue={infoDraft.bannerURL}
+                placeholder="Enter lottery banner URL..."
                 required
               />
             </Form.Group>
-            <Form.Group
-              className="flex-grow-1"
-              controlId="addLottery.info.timeTo"
-            >
-              <Form.Label>To</Form.Label>
+            <Form.Group controlId="addLottery.info.title">
+              <Form.Label> Lottery Title</Form.Label>
               <Form.Control
-                type="datetime-local"
-                name="timeTo"
-                min={timeFrom}
-                defaultValue={getLocalTimeString(new Date(infoDraft.endTime))}
-                value={timeTo}
-                onChange={(event) => handleSetTimeTo(event.target.value)}
+                type="text"
+                name="title"
+                defaultValue={infoDraft.title}
+                placeholder="Enter lottery title..."
                 required
               />
             </Form.Group>
+            <Form.Group controlId="addLottery.info.description">
+              <Form.Label> Description</Form.Label>
+              <Form.Control
+                as="textarea"
+                name="description"
+                defaultValue={infoDraft.description}
+                rows={6}
+                placeholder="Enter lottery description..."
+                required
+              />
+            </Form.Group>
+            <div className="mb-3 d-flex gap-3">
+              <Form.Group
+                className="flex-grow-1"
+                controlId="addLottery.info.timeFrom"
+              >
+                <Form.Label>From</Form.Label>
+                <Form.Control
+                  type="datetime-local"
+                  name="timeFrom"
+                  defaultValue={getLocalTimeString(
+                    new Date(infoDraft.startTime)
+                  )}
+                  value={timeFrom}
+                  onChange={(event) => handleSetTimeFrom(event.target.value)}
+                  required
+                />
+              </Form.Group>
+              <Form.Group
+                className="flex-grow-1"
+                controlId="addLottery.info.timeTo"
+              >
+                <Form.Label>To</Form.Label>
+                <Form.Control
+                  type="datetime-local"
+                  name="timeTo"
+                  min={timeFrom}
+                  defaultValue={getLocalTimeString(new Date(infoDraft.endTime))}
+                  value={timeTo}
+                  onChange={(event) => handleSetTimeTo(event.target.value)}
+                  required
+                />
+              </Form.Group>
+            </div>
+          </Form>
+          <div className="d-grid gap-1 w-50 mx-auto">
+            <Button type="submit" form="addLottery.info">
+              Next
+            </Button>
           </div>
-        </Form>
-        <div className="d-grid gap-1 w-50 mx-auto">
-          <Button type="submit" form="addLottery.info">
-            Next
-          </Button>
         </div>
-      </div>
-    </>
+      </Card.Body>
+    </Card>
   );
 }

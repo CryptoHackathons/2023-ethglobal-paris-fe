@@ -11,9 +11,9 @@ function AddLotteryMissionButton(props) {
       variant="primary"
       onClick={onClick}
     >
-      <i className={`bi bi-${icon} h4 m-0`}></i>
+      <i className={`bi bi-${icon} fs-4 m-0`}></i>
       {children && (
-        <span className="mx-3 h5 fw-bold m-0 w-100">{children}</span>
+        <span className="mx-3 fs-5 fw-bold m-0 w-100">{children}</span>
       )}
     </Button>
   );

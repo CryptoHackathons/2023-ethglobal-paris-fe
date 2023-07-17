@@ -1,6 +1,6 @@
 import React, { useCallback, useMemo, useState } from 'react';
 import axiosClient from '../../utils/axiosClient';
-import { Badge, Button, Form, Image } from 'react-bootstrap';
+import { Badge, Button, Card, Form, Image } from 'react-bootstrap';
 import { AddLotteryMissionList, AddLotteryRewardList } from './general';
 import { useNavigate } from 'react-router-dom';
 import { addLotteryAtom, globalAtom } from '../../model';
@@ -163,33 +163,40 @@ export function AddLotteryStep4() {
           <h3 className="fw-bold mb-3">Description</h3>
           <p>{infoDraft.description}</p>
         </div>
-        <Form
-          id="addLottery.contract"
-          className="d-grid gap-3"
-          noValidate
-          validated={validated}
-          onSubmit={handleSubmitLottery}
-        >
-          <Form.Group controlId="addLottery.contract.address">
-            <Form.Label>Token Address</Form.Label>
-            <Form.Control
-              type="text"
-              name="address"
-              placeholder="0x..."
-              required
-            />
-          </Form.Group>
-          <Form.Group controlId="addLottery.contract.amount">
-            <Form.Label>Token Amount</Form.Label>
-            <Form.Control
-              type="number"
-              name="amount"
-              placeholder="0"
-              min={0}
-              required
-            />
-          </Form.Group>
-        </Form>
+        <Card>
+          <Card.Header>
+            <Card.Title>Token Information</Card.Title>
+          </Card.Header>
+          <Card.Body>
+            <Form
+              id="addLottery.contract"
+              className="d-grid gap-3"
+              noValidate
+              validated={validated}
+              onSubmit={handleSubmitLottery}
+            >
+              <Form.Group controlId="addLottery.contract.address">
+                <Form.Label>Token Address</Form.Label>
+                <Form.Control
+                  type="text"
+                  name="address"
+                  placeholder="0x..."
+                  required
+                />
+              </Form.Group>
+              <Form.Group controlId="addLottery.contract.amount">
+                <Form.Label>Token Amount</Form.Label>
+                <Form.Control
+                  type="number"
+                  name="amount"
+                  placeholder="0"
+                  min={0}
+                  required
+                />
+              </Form.Group>
+            </Form>
+          </Card.Body>
+        </Card>
         <div className="d-grid gap-1 w-50 mx-auto">
           <Button onClick={() => navigate('../missions')} variant="secondary">
             Back

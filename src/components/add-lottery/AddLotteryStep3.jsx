@@ -1,5 +1,5 @@
 import React, { useCallback, useState } from 'react';
-import { Accordion, Button, InputGroup, Form } from 'react-bootstrap';
+import { Accordion, Button, InputGroup, Form, Card } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
 import AddLotteryMissionSetter from './general/AddLotteryMissionSetter';
 import { useAtom } from 'jotai';
@@ -66,70 +66,72 @@ export function AddLotteryStep3() {
   );
 
   return (
-    <div className="d-grid gap-4">
-      <Form
-        id="addLottery.missions"
-        className="d-grid gap-4"
-        noValidate
-        validated={validated}
-        onSubmit={handleSubmit}
-      >
-        <Accordion defaultActiveKey="0" alwaysOpen>
-          {missions.map((m, idx) => (
-            <>
-              <Accordion.Item eventKey={idx}>
-                <Accordion.Header>Mission {idx + 1}</Accordion.Header>
-                <AddLotteryMissionSetter
-                  idx={idx}
-                  isLast={missions.length === 1 && idx === 0}
-                  mission={m}
-                  onDeleteMission={() => handleDeleteMission(idx)}
+    <Card>
+      <Card.Body>
+        <div className="d-grid gap-4">
+          <Form
+            id="addLottery.missions"
+            className="d-grid gap-4"
+            noValidate
+            validated={validated}
+            onSubmit={handleSubmit}
+          >
+            <Accordion defaultActiveKey="0" alwaysOpen>
+              {missions.map((m, idx) => (
+                <Accordion.Item key={idx} eventKey={idx.toString()}>
+                  <Accordion.Header>Mission {idx + 1}</Accordion.Header>
+                  <AddLotteryMissionSetter
+                    idx={idx}
+                    isLast={missions.length === 1 && idx === 0}
+                    mission={m}
+                    onDeleteMission={() => handleDeleteMission(idx)}
+                  />
+                </Accordion.Item>
+              ))}
+            </Accordion>
+            <Button onClick={() => handleAddMission()}> Add Mission</Button>
+            <Form.Group controlId="addLottery.missions.requiredMissions">
+              <Form.Label> Required Missions to complete</Form.Label>
+              <InputGroup className="mb-3">
+                <Button
+                  variant="outline-secondary"
+                  disabled={requiredMissionAmount === 0}
+                  onClick={() =>
+                    setRequiredMissionAmount(requiredMissionAmount - 1)
+                  }
+                >
+                  <i className={`bi bi-dash-lg`}></i>
+                </Button>
+                <Form.Control
+                  type="int"
+                  name="totalRequiredMissions"
+                  value={requiredMissionAmount}
+                  required
                 />
-              </Accordion.Item>
-            </>
-          ))}
-        </Accordion>
-        <Button onClick={() => handleAddMission()}> Add Mission</Button>
-        <Form.Group controlId="addLottery.missions.requiredMissions">
-          <Form.Label> Required Missions to complete</Form.Label>
-          <InputGroup className="mb-3">
-            <Button
-              variant="outline-secondary"
-              disabled={requiredMissionAmount === 0}
-              onClick={() =>
-                setRequiredMissionAmount(requiredMissionAmount - 1)
-              }
-            >
-              <i className={`bi bi-dash-lg`}></i>
+                <Button
+                  variant="outline-secondary"
+                  disabled={requiredMissionAmount === missions.length}
+                  onClick={() =>
+                    setRequiredMissionAmount(requiredMissionAmount + 1)
+                  }
+                >
+                  <i className={`bi bi-plus-lg`}></i>
+                </Button>
+              </InputGroup>
+            </Form.Group>
+          </Form>
+          <div className="d-grid gap-1 w-50 mx-auto">
+            <Button onClick={() => navigate('../rewards')} variant="secondary">
+              Back
             </Button>
-            <Form.Control
-              type="int"
-              name="totalRequiredMissions"
-              value={requiredMissionAmount}
-              required
-            />
-            <Button
-              variant="outline-secondary"
-              disabled={requiredMissionAmount === missions.length}
-              onClick={() =>
-                setRequiredMissionAmount(requiredMissionAmount + 1)
-              }
-            >
-              <i className={`bi bi-plus-lg`}></i>
+            {/* <Button onClick={() => navigate('../confirmation')}>Next</Button> */}
+            <Button type="submit" form="addLottery.missions">
+              Next
             </Button>
-          </InputGroup>
-        </Form.Group>
-      </Form>
-      <div className="d-grid gap-1 w-50 mx-auto">
-        <Button onClick={() => navigate('../rewards')} variant="secondary">
-          Back
-        </Button>
-        {/* <Button onClick={() => navigate('../confirmation')}>Next</Button> */}
-        <Button type="submit" form="addLottery.missions">
-          Next
-        </Button>
-      </div>
-    </div>
+          </div>
+        </div>
+      </Card.Body>
+    </Card>
   );
 }
 

@@ -20,19 +20,27 @@ function LotteryTimer(props) {
         ) : (
           <Row className="g-3">
             <Col md={3} className="d-flex flex-column align-items-center">
-              <p className="h2 fw-bold m-0">{days}</p>
+              <p className="h2 fw-bold m-0">
+                {days.toString().padStart(2, '0')}
+              </p>
               Days
             </Col>
             <Col md={3} className="d-flex flex-column align-items-center">
-              <p className="h2 fw-bold m-0">{hours}</p>
+              <p className="h2 fw-bold m-0">
+                {hours.toString().padStart(2, '0')}
+              </p>
               Hours
             </Col>
             <Col md={3} className="d-flex flex-column align-items-center">
-              <p className="h2 fw-bold m-0">{minutes}</p>
+              <p className="h2 fw-bold m-0">
+                {minutes.toString().padStart(2, '0')}
+              </p>
               Minutes
             </Col>
             <Col md={3} className="d-flex flex-column align-items-center">
-              <p className="h2 fw-bold m-0">{seconds}</p>
+              <p className="h2 fw-bold m-0">
+                {seconds.toString().padStart(2, '0')}
+              </p>
               Seconds
             </Col>
           </Row>
