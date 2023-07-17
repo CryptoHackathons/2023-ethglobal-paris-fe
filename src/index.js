@@ -3,13 +3,21 @@ import ReactDOM from 'react-dom/client';
 import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
-import 'bootstrap/dist/css/bootstrap.min.css';
-import '@rainbow-me/rainbowkit/styles.css';
-import 'bootstrap-icons/font/bootstrap-icons.min.css';
 import { getDefaultWallets, RainbowKitProvider } from '@rainbow-me/rainbowkit';
 import { configureChains, createConfig, WagmiConfig } from 'wagmi';
 import { mainnet, polygonMumbai } from 'wagmi/chains';
 import { publicProvider } from 'wagmi/providers/public';
+
+// import 'bootstrap/dist/css/bootstrap.min.css';
+
+// stylesheets
+import './assets/scss/hope-ui.scss';
+import './assets/scss/custom.scss';
+import './assets/scss/dark.scss';
+import './assets/scss/rtl.scss';
+import './assets/scss/customizer.scss';
+import '@rainbow-me/rainbowkit/styles.css';
+import 'bootstrap-icons/font/bootstrap-icons.min.css';
 
 const { chains, publicClient } = configureChains(
   [mainnet, polygonMumbai],
