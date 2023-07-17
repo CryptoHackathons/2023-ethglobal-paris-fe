@@ -6,6 +6,7 @@ import { LotteryPropType } from '../../model/type';
 import { lotteryContract } from '../../utils/contract';
 import { useSetAtom } from 'jotai';
 import { globalAtom } from '../../model';
+import { waitForTransaction } from '@wagmi/core';
 
 const GET_PROOF = 'Get Proof';
 const REDEEM = 'Redeem';
@@ -29,10 +30,14 @@ function RedeemButton(props) {
   const getLotteryPoof = useCallback(async () => {
     setButtonLoading(true);
     try {
-      const { data } = client.get(`/lottery/${lotteryId}/redeem/${address}`);
+      const { data } = await client.get(
+        `/lottery/${lotteryId}/redeem/${address}`
+      );
+      console.log('data', data);
       const { user_id, proof } = data;
       setDrawerId(user_id);
-      setProof(proof);
+      setProof(proof.data);
+      setShowGetProofModal(true);
       setStatus(REDEEM);
     } catch (error) {
       console.log(error);
@@ -45,19 +50,26 @@ function RedeemButton(props) {
     }
   }, [lotteryId, address, setErrorToast]);
 
+  const showRedeemLotteryModal = useCallback(() => {
+    setShowSetProofModal(true);
+  }, []);
+
   const redeemLottery = useCallback(async () => {
     setButtonLoading(true);
+    setShowSetProofModal(false);
     try {
-      await write({
+      const redeemTxn = await write({
         args: [lotteryId, address, drawerId, proof],
       });
-      setStatus(REDEEMED);
+      await waitForTransaction(redeemTxn);
     } catch (error) {
-      setErrorToast({
-        show: true,
-        message: error.message,
-      });
+      console.log(error);
+      // setErrorToast({
+      //   show: true,
+      //   message: error.message,
+      // });
     } finally {
+      setStatus(REDEEMED);
       setButtonLoading(false);
     }
   }, [write, lotteryId, address, drawerId, proof, setErrorToast]);
@@ -76,17 +88,26 @@ function RedeemButton(props) {
   }
 
   const handler = {
-    GET_PROOF: getLotteryPoof,
-    REDEEM: redeemLottery,
+    [GET_PROOF]: getLotteryPoof,
+    [REDEEM]: showRedeemLotteryModal,
   };
 
   return (
-    <>
+    <div
+      onClick={(event) => {
+        event.preventDefault();
+        event.stopPropagation();
+      }}
+    >
       <Button
         style={{
           width: '100%',
         }}
-        onClick={handler[status]}
+        onClick={(event) => {
+          event.preventDefault();
+          event.stopPropagation();
+          handler[status]();
+        }}
         isLoading={isButtonLoading}
         disabled={status === REDEEMED}
       >
@@ -104,14 +125,14 @@ function RedeemButton(props) {
         <Modal.Body>
           <Form.Control
             as="textarea"
-            value={proof}
-            // style={{ height: '100px' }}
+            value={JSON.stringify(proof, null, 2)}
+            style={{ height: '300px' }}
           />
         </Modal.Body>
         <Modal.Footer>
           <Button
             variant="secondary"
-            onHide={() => setShowGetProofModal(false)}
+            onClick={() => setShowGetProofModal(false)}
           >
             Close
           </Button>
@@ -125,21 +146,28 @@ function RedeemButton(props) {
         centered
       >
         <Modal.Header closeButton>
-          <Modal.Title>Modal title</Modal.Title>
+          <Modal.Title>Put your proof here</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <Form.Control as="textarea" value={proof} />
+          <Form.Control
+            as="textarea"
+            value={JSON.stringify(proof, null, 2)}
+            style={{ height: '300px' }}
+          />
         </Modal.Body>
         <Modal.Footer>
           <Button
             variant="secondary"
-            onHide={() => setShowSetProofModal(false)}
+            onClick={() => setShowSetProofModal(false)}
           >
             Close
           </Button>
+          <Button variant="primary" onClick={redeemLottery}>
+            Redeem
+          </Button>
         </Modal.Footer>
       </Modal>
-    </>
+    </div>
   );
 }
 

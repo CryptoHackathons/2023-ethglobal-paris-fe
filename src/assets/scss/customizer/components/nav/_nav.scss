@@ -1,8 +1,8 @@
-.nav-link{
-    &:hover, &:focus {
-        color: var(--#{$variable-prefix}primary);
-    }
-}
+// .nav-link{
+//     &:hover, &:focus {
+//         color: var(--#{$variable-prefix}primary);
+//     }
+// }
 .nav-tabs{
     .nav-link{
         &.active{

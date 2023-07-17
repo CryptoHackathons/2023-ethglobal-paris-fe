@@ -32,18 +32,9 @@ function LotteryItem(props) {
             {getDemoDateString(lottery.startTime)} ~{' '}
             {getDemoDateString(lottery.endTime)} (GMT+2)
           </Card.Text>
-
-          {/* <Stack direction="horizontal" gap={2}>
-          <Badge bg="primary" className="py-2">
-            音樂
-          </Badge>
-          <Badge bg="primary" className="py-2">
-            娛樂
-          </Badge>
-        </Stack> */}
         </Card.Body>
         {isShowFooter && (
-          <Card.Footer>
+          <Card.Footer className="pt-0">
             <RedeemButton lotteryId={lottery.id} />
           </Card.Footer>
         )}

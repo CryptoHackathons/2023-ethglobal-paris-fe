@@ -17,7 +17,7 @@ function Layout(props) {
           <Navbar.Brand href="/">ZkLottery</Navbar.Brand>
           <Nav className="me-auto">
             <Nav.Link href="/add">Add Lottery</Nav.Link>
-            <Nav.Link href="/me">My Lottery</Nav.Link>
+            <Nav.Link href="/my-lotteries">My Lottery</Nav.Link>
           </Nav>
           <ConnectButton />
         </Container>
