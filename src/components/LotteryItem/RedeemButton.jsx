@@ -7,6 +7,7 @@ import { lotteryContract } from '../../utils/contract';
 import { useSetAtom } from 'jotai';
 import { globalAtom } from '../../model';
 import { waitForTransaction } from '@wagmi/core';
+import { ButtonSubmit } from '../common/button';
 
 const GET_PROOF = 'Get Proof';
 const REDEEM = 'Redeem';
@@ -36,7 +37,7 @@ function RedeemButton(props) {
       console.log('data', data);
       const { user_id, proof } = data;
       setDrawerId(user_id);
-      setProof(proof.data);
+      setProof(JSON.parse(proof));
       setShowGetProofModal(true);
       setStatus(REDEEM);
     } catch (error) {
@@ -99,7 +100,7 @@ function RedeemButton(props) {
         event.stopPropagation();
       }}
     >
-      <Button
+      <ButtonSubmit
         style={{
           width: '100%',
         }}
@@ -108,11 +109,11 @@ function RedeemButton(props) {
           event.stopPropagation();
           handler[status]();
         }}
-        isLoading={isButtonLoading}
+        loading={isButtonLoading}
         disabled={status === REDEEMED}
       >
         {status}
-      </Button>
+      </ButtonSubmit>
       <Modal
         show={isShowGetProofModal}
         onHide={() => setShowGetProofModal(false)}
@@ -120,13 +121,14 @@ function RedeemButton(props) {
         centered
       >
         <Modal.Header closeButton>
-          <Modal.Title>Here is your proof, save it</Modal.Title>
+          <Modal.Title>Here is your proof, copy and save it</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <Form.Control
             as="textarea"
-            value={JSON.stringify(proof, null, 2)}
+            defaultValue={JSON.stringify(proof, null, 2)}
             style={{ height: '300px' }}
+            disabled={true}
           />
         </Modal.Body>
         <Modal.Footer>
@@ -135,6 +137,14 @@ function RedeemButton(props) {
             onClick={() => setShowGetProofModal(false)}
           >
             Close
+          </Button>
+          <Button
+            variant="primary"
+            onClick={() =>
+              navigator.clipboard.writeText(JSON.stringify(proof, null, 2))
+            }
+          >
+            Copy
           </Button>
         </Modal.Footer>
       </Modal>
@@ -151,7 +161,7 @@ function RedeemButton(props) {
         <Modal.Body>
           <Form.Control
             as="textarea"
-            value={JSON.stringify(proof, null, 2)}
+            defaultValue={JSON.stringify(proof, null, 2)}
             style={{ height: '300px' }}
           />
         </Modal.Body>

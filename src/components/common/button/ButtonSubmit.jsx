@@ -12,6 +12,7 @@ export function ButtonSubmit(props) {
     form,
     onClick,
     children,
+    style,
   } = props;
 
   return (
@@ -22,6 +23,7 @@ export function ButtonSubmit(props) {
       disabled={disabled || loading}
       type={type}
       form={form}
+      style={style}
     >
       {loading ? (
         <Spinner
@@ -47,4 +49,5 @@ ButtonSubmit.propTypes = {
   form: PropTypes.string,
   onClick: PropTypes.func,
   children: PropTypes.node,
+  style: PropTypes.object,
 };

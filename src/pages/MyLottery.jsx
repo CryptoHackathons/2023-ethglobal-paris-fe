@@ -34,14 +34,12 @@ export function MyLotteryPage() {
 
     async function getUserLotteries() {
       try {
-        const addUserRes = await client.post(`/user/${address}`);
-        console.log(addUserRes.data);
+        await client.post(`/user/${address}`);
         const res = await client.get(`/user/${address}/lotteries`);
         console.log(res.data);
         const lotteries = serializeLotteries(
           res.data.map((item) => item.lottery)
         );
-        console.log(lotteries);
         setLotteries(lotteries);
       } catch (error) {
         setErrorToast({
