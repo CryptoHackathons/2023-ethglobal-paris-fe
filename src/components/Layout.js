@@ -12,7 +12,7 @@ function Layout(props) {
 
   return (
     <div className="App">
-      <Navbar bg="light" data-bs-theme="light">
+      <Navbar bg="primary" variant="dark" sticky="top">
         <Container>
           <Navbar.Brand href="/">ZkLottery</Navbar.Brand>
           <Nav className="me-auto">
