@@ -5,11 +5,12 @@ import { useAtom, useSetAtom } from 'jotai';
 import { globalAtom, lotteryAtom } from '../model';
 import { serializeLotteries } from '../utils/functions';
 import client from '../utils/axiosClient';
-import { LotteryContainer } from '../components/lottery';
+import { LotteryContainer, LotteryMissionModal } from '../components/lottery';
 
 export function LotteryPage() {
   const { lotteryID } = useParams();
   const [loading, setLoading] = useAtom(lotteryAtom.loading);
+  const [missionModal, setMissionModal] = useAtom(lotteryAtom.missionModal);
   const setLottery = useSetAtom(lotteryAtom.lottery);
   const setErrorToast = useSetAtom(globalAtom.errorToast);
 
@@ -65,6 +66,11 @@ export function LotteryPage() {
       ) : (
         <LotteryContainer />
       )}
+      <LotteryMissionModal
+        show={missionModal.show}
+        missionID={missionModal.missionID}
+        onClose={() => setMissionModal((prev) => ({ ...prev, show: false }))}
+      />
     </>
   );
 }

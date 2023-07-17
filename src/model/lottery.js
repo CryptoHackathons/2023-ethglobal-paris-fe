@@ -2,6 +2,7 @@ import { atom } from 'jotai';
 
 export const lotteryAtom = {
   loading: atom(false),
+  submitting: atom(false),
   lottery: atom({
     id: 'c5f9fbf6-7690-4b0f-a532-48e1937edde7', // UUID v4
     startTime: new Date('2023-07-08T05:00:00.000Z'), // ISO 8601 format (UTC)
@@ -114,5 +115,35 @@ export const lotteryAtom = {
         },
       ],
     },
+  }),
+  missionModal: atom({
+    show: false,
+    missionID: '',
+  }),
+  completeMission: atom(null, (get, set, missionID) => {
+    const lottery = get(lotteryAtom.lottery);
+    const isLotteryExists = lottery.missions.missionList
+      .map((m) => m.id)
+      .includes(missionID);
+
+    if (!isLotteryExists) return;
+
+    const newLottery = {
+      ...lottery,
+      missions: {
+        ...lottery.missions,
+        totalCompletedMissions: lottery.missions.totalCompletedMissions + 1,
+        missionList: lottery.missions.missionList.map((m) => {
+          return m.id === missionID
+            ? {
+                ...m,
+                completed: true,
+              }
+            : m;
+        }),
+      },
+    };
+
+    set(lotteryAtom.lottery, newLottery);
   }),
 };

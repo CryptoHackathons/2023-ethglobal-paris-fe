@@ -1,16 +1,35 @@
-import React, { useMemo } from 'react';
-import { Badge, Button, Col, Image, Row } from 'react-bootstrap';
-import { useAtomValue } from 'jotai';
+import React, { useCallback, useMemo } from 'react';
+import { Badge, Col, Image, Row } from 'react-bootstrap';
+import { useAtom, useAtomValue } from 'jotai';
 import { lotteryAtom } from '../../model';
 import { getDemoDateString } from '../../utils/functions';
 import LotteryMissionList from './LotteryMissionList';
 import LotteryAttendeeList from './LotteryAttendeeList';
 import LotteryRewardList from './LotteryRewardList';
 import LotteryTimer from './LotteryTimer';
+import { ButtonSubmit } from '../common/button';
 
 export function LotteryContainer() {
   const lottery = useAtomValue(lotteryAtom.lottery);
+  const [submitting, setSubmitting] = useAtom(lotteryAtom.submitting);
+
   const expired = useMemo(() => lottery.endTime < new Date(), [lottery]);
+  const missionCompleted = useMemo(
+    () =>
+      lottery.missions.totalCompletedMissions ===
+      lottery.missions.totalRequiredMissions,
+    [lottery.missions]
+  );
+
+  const handleDrawLottery = useCallback(async () => {
+    setSubmitting(true);
+    console.log(`Draw Lottery ${lottery.id}`); // TODO: implement draw function
+
+    // simulate drawing action for 2s
+    await new Promise((resolve) => setTimeout(resolve, 2000));
+
+    setSubmitting(false);
+  }, [lottery, setSubmitting]);
 
   return (
     <>
@@ -64,7 +83,17 @@ export function LotteryContainer() {
           <div className="d-grid gap-5">
             <div id="lottery-info-and-action" className="d-grid gap-4">
               {/* <LotteryBadgeHolder /> */}
-              <Button disabled={expired}>Draw</Button>
+              <ButtonSubmit
+                loading={submitting}
+                disabled={expired || !missionCompleted}
+                onClick={handleDrawLottery}
+              >
+                {expired
+                  ? 'Expired'
+                  : !missionCompleted
+                  ? 'Complete Missions to Draw'
+                  : 'Draw'}
+              </ButtonSubmit>
               <LotteryTimer expireTime={lottery.endTime} />
             </div>
             <div id="lottery-rewards">
