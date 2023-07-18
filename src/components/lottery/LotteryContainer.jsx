@@ -1,17 +1,24 @@
 import React, { useCallback, useMemo } from 'react';
 import { Badge, Col, Image, Row } from 'react-bootstrap';
-import { useAtom, useAtomValue } from 'jotai';
-import { lotteryAtom } from '../../model';
+import { useAtom, useAtomValue, useSetAtom } from 'jotai';
+import { globalAtom, lotteryAtom } from '../../model';
 import { getDemoDateString } from '../../utils/functions';
 import LotteryMissionList from './LotteryMissionList';
 import LotteryAttendeeList from './LotteryAttendeeList';
 import LotteryRewardList from './LotteryRewardList';
 import LotteryTimer from './LotteryTimer';
 import { ButtonSubmit } from '../common/button';
+import { useWalletClient } from 'wagmi';
+import client from '../../utils/axiosClient';
+import PropTypes from 'prop-types';
 
-export function LotteryContainer() {
+export function LotteryContainer(props) {
+  const { onRefresh } = props;
+
   const lottery = useAtomValue(lotteryAtom.lottery);
   const [submitting, setSubmitting] = useAtom(lotteryAtom.submitting);
+  const setErrorToast = useSetAtom(globalAtom.errorToast);
+  const { data: walletClient } = useWalletClient();
 
   const expired = useMemo(() => lottery.endTime < new Date(), [lottery]);
   const missionCompleted = useMemo(
@@ -22,14 +29,46 @@ export function LotteryContainer() {
   );
 
   const handleDrawLottery = useCallback(async () => {
-    setSubmitting(true);
-    console.log(`Draw Lottery ${lottery.id}`); // TODO: implement draw function
+    const drawLottery = async () => {
+      setSubmitting(true);
 
-    // simulate drawing action for 2s
-    await new Promise((resolve) => setTimeout(resolve, 2000));
+      if (walletClient === undefined) {
+        setErrorToast({
+          show: true,
+          message: 'Error occured while retrieving wallet address',
+        });
+        setSubmitting(false);
+        return;
+      }
 
-    setSubmitting(false);
-  }, [lottery, setSubmitting]);
+      try {
+        const response = await client.post(
+          `/user/${walletClient.account.address}/lottery/${lottery.id}`
+        );
+
+        if (response.data !== 'OK') {
+          setErrorToast({
+            show: true,
+            message: 'Draw Error',
+          });
+          setSubmitting(false);
+          return;
+        }
+
+        onRefresh();
+        setSubmitting(false);
+      } catch (error) {
+        setErrorToast({
+          show: true,
+          message: error.message,
+        });
+        setSubmitting(false);
+        return;
+      }
+    };
+
+    drawLottery();
+  }, [lottery, onRefresh, setErrorToast, setSubmitting, walletClient]);
 
   return (
     <>
@@ -85,10 +124,12 @@ export function LotteryContainer() {
               {/* <LotteryBadgeHolder /> */}
               <ButtonSubmit
                 loading={submitting}
-                disabled={expired || !missionCompleted}
+                disabled={expired || !missionCompleted || lottery.drawn}
                 onClick={handleDrawLottery}
               >
-                {expired
+                {lottery.drawn
+                  ? 'User has already drawn'
+                  : expired
                   ? 'Expired'
                   : !missionCompleted
                   ? 'Complete Missions to Draw'
@@ -108,3 +149,7 @@ export function LotteryContainer() {
     </>
   );
 }
+
+LotteryContainer.propTypes = {
+  onRefresh: PropTypes.func.isRequired,
+};

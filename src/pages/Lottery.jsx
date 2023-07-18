@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useCallback, useEffect } from 'react';
 import { Spinner } from 'react-bootstrap';
 import { useParams } from 'react-router-dom';
 import { useAtom, useSetAtom } from 'jotai';
@@ -6,52 +6,115 @@ import { globalAtom, lotteryAtom } from '../model';
 import { serializeLotteries } from '../utils/functions';
 import client from '../utils/axiosClient';
 import { LotteryContainer, LotteryMissionModal } from '../components/lottery';
+import { useWalletClient } from 'wagmi';
 
 export function LotteryPage() {
   const { lotteryID } = useParams();
   const [loading, setLoading] = useAtom(lotteryAtom.loading);
   const [missionModal, setMissionModal] = useAtom(lotteryAtom.missionModal);
   const setLottery = useSetAtom(lotteryAtom.lottery);
+  const setSubmitting = useSetAtom(lotteryAtom.submitting);
   const setErrorToast = useSetAtom(globalAtom.errorToast);
+  const { data: walletClient } = useWalletClient();
 
-  useEffect(() => {
-    const fetchLottery = async () => {
-      setLoading(true);
+  const fetchLottery = useCallback(async () => {
+    setLoading(true);
+    try {
+      const response = await client.get(`/lottery/${lotteryID}`);
+      const [l] = serializeLotteries([response?.data]);
+
+      setLottery((prev) => ({
+        ...prev,
+        ...l,
+        attendee: { ...prev.attendee },
+        host: { ...prev.host },
+        missions:
+          l.missions === null
+            ? {
+                totalCompletedMissions: 0,
+                totalRequiredMissions: 0,
+                missionList: [],
+              }
+            : {
+                totalCompletedMissions: 0,
+                ...l.missions,
+              },
+        prizes:
+          l.prizes === null
+            ? {
+                totalQuantity: 0,
+                contents: [],
+              }
+            : l.prizes,
+      }));
+      setLoading(false);
+    } catch (error) {
+      setErrorToast({
+        show: true,
+        message: error.message,
+      });
+      setLoading(false);
+    }
+  }, [lotteryID, setErrorToast, setLoading, setLottery]);
+
+  const getDrawnState = useCallback(async () => {
+    setSubmitting(true);
+    try {
+      const drawnStateResponse = await client.get(
+        `/user/${walletClient.account.address}/lottery/${lotteryID}`
+      );
+
+      setLottery((prev) => ({
+        ...prev,
+        drawn: drawnStateResponse.data,
+      }));
+      setSubmitting(false);
+    } catch (error) {
+      setErrorToast({
+        show: true,
+        message: error.message,
+      });
+      setSubmitting(false);
+      return;
+    }
+  }, [lotteryID, setErrorToast, setLottery, setSubmitting, walletClient]);
+
+  const updateLotteryMission = useCallback(
+    async (mission) => {
       try {
-        const response = await client.get(`/lottery/${lotteryID}`);
-        const [l] = serializeLotteries([response?.data]);
+        const missionJSON = JSON.stringify(mission);
+        const missionResponse = await client.post(
+          `/lottery/${lotteryID}/missions`,
+          {
+            data: missionJSON,
+          }
+        );
 
-        setLottery((prev) => ({
-          ...l,
-          attendee: { ...prev.attendee },
-          host: { ...prev.host },
-          missions:
-            l.missions === null
-              ? {
-                  totalCompletedMissions: 0,
-                  totalRequiredMissions: 0,
-                  missionList: [],
-                }
-              : l.missions,
-          prizes:
-            l.prizes === null
-              ? {
-                  totalQuantity: 0,
-                  contents: [],
-                }
-              : l.prizes,
-        }));
-        setLoading(false);
+        if (missionResponse.status !== 200) {
+          setErrorToast({
+            show: true,
+            message: 'Update Mission Data Error',
+          });
+        }
       } catch (error) {
         setErrorToast({
           show: true,
-          message: error.message,
+          message: `Update Mission Data Error: ${error.message}`,
         });
-        setLoading(false);
       }
-    };
+    },
+    [lotteryID, setErrorToast]
+  );
+
+  useEffect(() => {
     fetchLottery();
-  }, [lotteryID, setErrorToast, setLoading, setLottery]);
+  }, [fetchLottery]);
+
+  useEffect(() => {
+    if (walletClient === undefined) return;
+
+    getDrawnState();
+  }, [getDrawnState, walletClient]);
 
   return (
     <>
@@ -64,11 +127,17 @@ export function LotteryPage() {
           />
         </div>
       ) : (
-        <LotteryContainer />
+        <LotteryContainer
+          onRefresh={() => {
+            fetchLottery();
+            if (walletClient !== undefined) getDrawnState();
+          }}
+        />
       )}
       <LotteryMissionModal
         show={missionModal.show}
         missionID={missionModal.missionID}
+        onUpdateMission={updateLotteryMission}
         onClose={() => setMissionModal((prev) => ({ ...prev, show: false }))}
       />
     </>

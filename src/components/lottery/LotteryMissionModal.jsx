@@ -2,12 +2,46 @@ import React, { useCallback, useState } from 'react';
 import PropTypes from 'prop-types';
 import { Button, Form, Modal } from 'react-bootstrap';
 import { ButtonSubmit } from '../common/button';
-import { useSetAtom } from 'jotai';
+import { useAtom } from 'jotai';
 import { lotteryAtom } from '../../model';
 
-export function LotteryMissionModal({ show, missionID, onClose }) {
+export function LotteryMissionModal({
+  show,
+  missionID,
+  onUpdateMission,
+  onClose,
+}) {
   const [validated, setValidated] = useState(false);
-  const setCompleteMission = useSetAtom(lotteryAtom.completeMission);
+  const [lottery, setLottery] = useAtom(lotteryAtom.lottery);
+
+  const completeMission = useCallback(() => {
+    const isLotteryExists = lottery.missions.missionList
+      .map((m) => m.id)
+      .includes(missionID);
+
+    if (!isLotteryExists) return;
+
+    const newMission = {
+      ...lottery.missions,
+      totalCompletedMissions: lottery.missions.totalCompletedMissions + 1,
+      missionList: lottery.missions.missionList.map((m) => {
+        return m.id === missionID
+          ? {
+              ...m,
+              completed: true,
+            }
+          : m;
+      }),
+    };
+
+    const newLottery = {
+      ...lottery,
+      missions: newMission,
+    };
+
+    setLottery(newLottery);
+    onUpdateMission(newMission);
+  }, [lottery, missionID, onUpdateMission, setLottery]);
 
   const handleClose = useCallback(() => {
     setValidated(false);
@@ -24,10 +58,10 @@ export function LotteryMissionModal({ show, missionID, onClose }) {
 
       if (form.checkValidity() === false) return;
 
-      setCompleteMission(missionID);
+      completeMission();
       handleClose();
     },
-    [handleClose, missionID, setCompleteMission]
+    [completeMission, handleClose]
   );
 
   return (
@@ -69,5 +103,6 @@ export function LotteryMissionModal({ show, missionID, onClose }) {
 LotteryMissionModal.propTypes = {
   show: PropTypes.bool.isRequired,
   missionID: PropTypes.string.isRequired,
+  onUpdateMission: PropTypes.func.isRequired,
   onClose: PropTypes.func.isRequired,
 };
