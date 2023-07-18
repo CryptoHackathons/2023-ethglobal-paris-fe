@@ -112,6 +112,7 @@ export function AddLotteryStep4() {
         });
         await waitForTransaction(listLotteryTxn);
       } catch (error) {
+        console.log(error);
         setErrorToast({
           show: true,
           message: error.message,
