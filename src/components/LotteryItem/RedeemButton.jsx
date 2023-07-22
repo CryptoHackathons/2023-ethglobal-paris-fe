@@ -1,9 +1,13 @@
 import React, { useCallback, useState } from 'react';
 import { Button, Form, Modal } from 'react-bootstrap';
-import { useAccount, useContractWrite } from 'wagmi';
+import { useAccount, useContractWrite, useWalletClient } from 'wagmi';
 import client from '../../utils/axiosClient';
 import { LotteryPropType } from '../../model/type';
-import { lotteryContract } from '../../utils/contract';
+import {
+  // lotteryContract,
+  lotteryContract2,
+  usdtTestContract,
+} from '../../utils/contract';
 import { useSetAtom } from 'jotai';
 import { globalAtom } from '../../model';
 import { waitForTransaction } from '@wagmi/core';
@@ -22,10 +26,19 @@ function RedeemButton(props) {
   const [isShowGetProofModal, setShowGetProofModal] = useState(false);
   const [isShowSetProofModal, setShowSetProofModal] = useState(false);
   const { address } = useAccount();
-  const { write } = useContractWrite({
-    ...lotteryContract,
-    functionName: 'redeemLotteryPrize',
+  const { data: walletClient } = useWalletClient();
+  // const { writeAsync: redeemLotteryPrize } = useContractWrite({
+  //   ...lotteryContract,
+  //   functionName: 'redeemLotteryPrize',
+  //   walletClient,
+  // });
+  console.log(drawerId);
+  const { writeAsync: redeemLotteryPrize2 } = useContractWrite({
+    ...lotteryContract2,
+    functionName: 'redeemLotteryPrize2',
+    walletClient,
   });
+
   const [status, setStatus] = useState(GET_PROOF);
 
   const getLotteryPoof = useCallback(async () => {
@@ -59,21 +72,25 @@ function RedeemButton(props) {
     setButtonLoading(true);
     setShowSetProofModal(false);
     try {
-      const redeemTxn = await write({
-        args: [lotteryId, address, drawerId, proof],
+      const redeemTxn = await redeemLotteryPrize2({
+        args: [usdtTestContract.address, 100000000000000000],
       });
+      // const redeemTxn = await redeemLotteryPrize({
+      //   args: [lotteryId, address, drawerId, proof],
+      // });
+      console.log(redeemTxn);
       await waitForTransaction(redeemTxn);
+      setStatus(REDEEMED);
     } catch (error) {
       console.log(error);
-      // setErrorToast({
-      //   show: true,
-      //   message: error.message,
-      // });
+      setErrorToast({
+        show: true,
+        message: error.message,
+      });
     } finally {
-      setStatus(REDEEMED);
       setButtonLoading(false);
     }
-  }, [write, lotteryId, address, drawerId, proof, setErrorToast]);
+  }, [setErrorToast, redeemLotteryPrize2]);
 
   if (!address) {
     return (

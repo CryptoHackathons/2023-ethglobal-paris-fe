@@ -217,6 +217,22 @@ export const lotteryContract = {
   ],
 };
 
+export const lotteryContract2 = {
+  address: '0x92fded6eee3b2be83db76936925f14e128c0d15e',
+  abi: [
+    {
+      inputs: [
+        { internalType: 'address', name: 'tokenAddress', type: 'address' },
+        { internalType: 'uint256', name: 'amount', type: 'uint256' },
+      ],
+      name: 'redeemLotteryPrize2',
+      outputs: [],
+      stateMutability: 'nonpayable',
+      type: 'function',
+    },
+  ],
+};
+
 export const usdtTestContract = {
   address: '0x104540F9c03f187eB213Da3Cc03d84A00E4BF1a2',
   abi: [

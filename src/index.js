@@ -6,7 +6,8 @@ import reportWebVitals from './reportWebVitals';
 import { getDefaultWallets, RainbowKitProvider } from '@rainbow-me/rainbowkit';
 import { configureChains, createConfig, WagmiConfig } from 'wagmi';
 import { mainnet, polygonMumbai } from 'wagmi/chains';
-import { publicProvider } from 'wagmi/providers/public';
+// import { publicProvider } from 'wagmi/providers/public';
+import { jsonRpcProvider } from 'wagmi/providers/jsonRpc';
 
 // import 'bootstrap/dist/css/bootstrap.min.css';
 
@@ -21,7 +22,15 @@ import 'bootstrap-icons/font/bootstrap-icons.min.css';
 
 const { chains, publicClient } = configureChains(
   [mainnet, polygonMumbai],
-  [publicProvider()]
+  // [publicProvider()]
+  [
+    jsonRpcProvider({
+      rpc: () => ({
+        // polygonMumbai PRC
+        http: 'https://polygon-testnet.public.blastapi.io',
+      }),
+    }),
+  ]
 );
 
 const { connectors } = getDefaultWallets({
